@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/11 16:21:45 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 00:32:37 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	init_map(char *map_file, t_map *map)
 	}
 }
 
-static void	draw_map(t_map *map)
+void	draw_map(t_map *map)
 {
 	size_t	i;
 	size_t	j;
@@ -57,11 +57,13 @@ static void	draw_map(t_map *map)
 		j = 0;
 		while (j < map->len)
 		{
-			value = map->map[j + i * map->len];
-			if (value == '1')
+			value = map->map[map->len * i + j];
+			if (value == '0')
+				color = rgb(255, 255, 255);
+			else if (value == '1')
 				color = rgb(255, 0, 0);
 			else
-				color = rgb(255, 255, 255);
+				color = rgb(0, 0, 255);
 			img_pixel_put(&map->img, j, i, color);
 			++j;
 		}
@@ -88,7 +90,7 @@ int	main(int argc, char **argv)
 		map.win_ptr = win_ptr;
 		init_map(argv[1], &map);
 		draw_map(&map);
-		init_loop(mlx_ptr, win_ptr);
+		init_loop(mlx_ptr, win_ptr, &map);
 	}
 	else if (argv && argv[0]) {
 		printf("Usage: %s <map.cub3D>\n", argv[0]);

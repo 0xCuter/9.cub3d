@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/11 16:11:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 00:33:13 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,16 @@ typedef struct s_map {
 // Put color in image
 void	img_pixel_put(t_img *img, int x, int y, int color);
 // Sets up keyboard and mouse hooks, then launches main loop
-void	init_loop(void *mlx_ptr, void *win_ptr);
+void	init_loop(void *mlx_ptr, void *win_ptr, t_map *map);
 // Returns an int representing a color
 int		rgb(unsigned char r, unsigned char g, unsigned char b);
 
 //hooks.c
 int	mouse_hook(int button, int x, int y, void *param);
-int	key_press_hook(int keycode, void *param);
+int	key_press_hook(int keycode, t_map *map);
+
+//main.c
+void	draw_map(t_map *map);
 
 //debug/
 # include "debug.h"

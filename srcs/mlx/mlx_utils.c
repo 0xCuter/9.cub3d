@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:13 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/11 16:19:30 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 00:01:18 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ static int	exit_program()
 	exit(0);
 }
 
-void	init_loop(void *mlx_ptr, void *win_ptr)
+void	init_loop(void *mlx_ptr, void *win_ptr, t_map *map)
 {
-	t_mouse_hook	mouse_params;
-	t_key_hook		key_params;
+	// t_mouse_hook	mouse_params;
+	// t_key_hook		key_params;
 
-	mouse_params = (t_mouse_hook){mlx_ptr, win_ptr};
-	mlx_mouse_hook(win_ptr, mouse_hook, &mouse_params);
-	key_params = (t_key_hook){mlx_ptr, win_ptr};
-	mlx_hook(win_ptr, 2, 1L << 0, key_press_hook, &key_params);
-	mlx_hook(win_ptr, 17, 0, exit_program, &key_params);
+	// mouse_params = (t_mouse_hook){mlx_ptr, win_ptr};
+	mlx_mouse_hook(win_ptr, mouse_hook, NULL);
+	// key_params = (t_key_hook){mlx_ptr, win_ptr};
+	mlx_hook(win_ptr, 2, 1L << 0, key_press_hook, map);
+	mlx_hook(win_ptr, 17, 0, exit_program, NULL);
 	mlx_loop(mlx_ptr);
 }
 
