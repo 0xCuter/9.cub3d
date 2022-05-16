@@ -3,80 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 00:32:37 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/16 11:45:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void	init_map(char *map_file, t_map *map)
+static int	map_tile_color(int tile)
 {
-	size_t	i;
-	int		fd;
-	char	*buf;
-
-	fd = open(map_file, O_RDONLY);
-	if (fd < 0)
-	{
-		perror("MAP");
-		exit(fd);
-	}
-	buf = get_next_line(fd);
-	map->len = ft_strlen(buf) - 1;
-	map->img.img = mlx_new_image(map->mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
-	map->img.addr = mlx_get_data_addr(map->img.img,
-			&map->img.bits_per_pixel,
-			&map->img.line_len,
-			&map->img.endian);
-	map->map = malloc((map->len * map->len) * sizeof(char));
-	if (map == NULL)
-		return;
-	i = 0;
-	while (buf)
-	{
-		ft_strlcpy(map->map + i, buf, map->len + 1);
-		free(buf);
-		buf = get_next_line(fd);
-		i += map->len;
-	}
+	if (tile == T_EMPTY)
+		return (rgb(200, 200, 200));
+	else if (tile == T_WALL)
+		return (rgb(255, 0, 0));
+	return (rgb(255, 255, 255));
 }
 
-void	draw_map(t_map *map)
+void	draw(t_mlx_data *mlx, t_map *map, t_player *player)
 {
-	size_t	i;
-	size_t	j;
-	char	value;
-	int		color;
+	size_t	x;
+	size_t	y;
+	char	tile;
 
-	i = 0;
-	while (i < map->len)
+	y = 0;
+	while (y < map->len)
 	{
-		j = 0;
-		while (j < map->len)
+		x = 0;
+		while (x < map->len)
 		{
-			value = map->map[map->len * i + j];
-			if (value == '0')
-				color = rgb(255, 255, 255);
-			else if (value == '1')
-				color = rgb(255, 0, 0);
-			else
-				color = rgb(0, 0, 255);
-			img_pixel_put(&map->img, j, i, color);
-			++j;
+			tile = map->map[x + map->len * y];
+			img_square_put(&mlx->img, map_tile_color(tile),
+				(t_point){x * TILE_SIZE, y * TILE_SIZE},
+				(t_point){TILE_SIZE, TILE_SIZE});
+			++x;
 		}
-		++i;
+		++y;
 	}
-	mlx_put_image_to_window(map->mlx_ptr, map->win_ptr, map->img.img, 0, 0);
+	img_square_put(&mlx->img, rgb(0, 0, 255),
+		(t_point){player->pos.x * TILE_SIZE, player->pos.y * TILE_SIZE},
+		(t_point){TILE_SIZE, TILE_SIZE});
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img, 0, 0);
 }
 
 int	main(int argc, char **argv)
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	t_map	map;
+	t_data	data;
 
 	if (argc == 2)
 	{
@@ -86,13 +61,14 @@ int	main(int argc, char **argv)
 		win_ptr = mlx_new_window(mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "FdF");
 		if (win_ptr == NULL)
 			exit(-1);
-		map.mlx_ptr = mlx_ptr;
-		map.win_ptr = win_ptr;
-		init_map(argv[1], &map);
-		draw_map(&map);
-		init_loop(mlx_ptr, win_ptr, &map);
+		data.mlx_data.mlx_ptr = mlx_ptr;
+		data.mlx_data.win_ptr = win_ptr;
+		init_data(argv[1], &data);
+		draw(&data.mlx_data, &data.map, &data.player);
+		init_loop(mlx_ptr, win_ptr, &data);
 	}
-	else if (argv && argv[0]) {
+	else if (argv && argv[0])
+	{
 		printf("Usage: %s <map.cub3D>\n", argv[0]);
 		exit(1);
 	}

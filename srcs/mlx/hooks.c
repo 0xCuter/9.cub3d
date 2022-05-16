@@ -3,119 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:07 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 00:58:29 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/16 11:43:06 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void	move_w(t_map *map)
+static void	move_player(t_data *data, int keycode)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < map->len * map->len)
-	{
-		if (map->map[i] == 'P')
-		{
-			if (map->map[i - map->len] != '1')
-			{
-				map->map[i] = '0';
-				map->map[i - map->len] = 'P';
-				break ;
-			}
-			else
-				return ;
-		}
-		i++;
-	}
-	draw_map(map);
+	if (keycode == KEY_W)
+		--data->player.pos.y;
+	else if (keycode == KEY_S)
+		++data->player.pos.y;
+	else if (keycode == KEY_A)
+		--data->player.pos.x;
+	else if (keycode == KEY_D)
+		++data->player.pos.x;
+	draw(&data->mlx_data, &data->map, &data->player);
 }
 
-static void	move_a(t_map *map)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < map->len * map->len)
-	{
-		if (map->map[i] == 'P')
-		{
-			if (map->map[i - 1] != '1')
-			{
-				map->map[i] = '0';
-				map->map[i - 1] = 'P';
-				break ;
-			}
-			else
-				return ;
-		}
-		i++;
-	}
-	draw_map(map);
-}
-
-static void	move_s(t_map *map)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < map->len * map->len)
-	{
-		if (map->map[i] == 'P')
-		{
-			if (map->map[i + map->len] != '1')
-			{
-				map->map[i] = '0';
-				map->map[i + map->len] = 'P';
-				break ;
-			}
-			else
-				return ;
-		}
-		i++;
-	}
-	draw_map(map);
-}
-
-static void	move_d(t_map *map)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < map->len * map->len)
-	{
-		if (map->map[i] == 'P')
-		{
-			if (map->map[i + 1] != '1')
-			{
-				map->map[i] = '0';
-				map->map[i + 1] = 'P';
-				break ;
-			}
-			else
-				return ;
-		}
-		i++;
-	}
-	draw_map(map);
-}
-
-int	key_press_hook(int keycode, t_map *map)
+int	key_press_hook(int keycode, t_data *data)
 {
 	if (keycode == KEY_ESCAPE)
 		exit(0);
-	if (keycode == KEY_W)
-		move_w(map);
-	if (keycode == KEY_A)
-		move_a(map);
-	if (keycode == KEY_S)
-		move_s(map);
-	if (keycode == KEY_D)
-		move_d(map);
+	move_player(data, keycode);
 	return (0);
 }
 
@@ -125,6 +39,5 @@ int	mouse_hook(int button, int x, int y, void *param)
 	(void)x;
 	(void)y;
 	(void)param;
-
 	return (0);
 }

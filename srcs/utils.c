@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 15:57:36 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 11:41:25 by vvandenb         ###   ########.fr       */
+/*   Created: 2022/05/16 10:17:42 by vvandenb          #+#    #+#             */
+/*   Updated: 2022/05/16 10:37:37 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#include "main.h"
 
-//map.c
-void	print_map(t_map *map);
+void	exit_perror(char *s, int i)
+{
+	perror(s);
+	exit(i);
+}
 
-#endif
+void	exit_error(char *s, int i)
+{
+	ft_putstr_fd(s, STDERR_FILENO);
+	exit(i);
+}
