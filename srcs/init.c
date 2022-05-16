@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 11:52:09 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 18:32:22 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,17 @@ static char	find_player(t_data *data, char *line, int i)
 		player = ft_strchr(line, 'E');
 	if (player)
 	{
-		data->player.orientation = *player;
-		data->player.pos = (t_point){(player - line), (i / data->map.len)};
+		if (*player == 'E')
+			data->player.angle = 0;
+		if (*player == 'N')
+			data->player.angle = M_PI * 3 / 2;
+		if (*player == 'W')
+			data->player.angle = M_PI;
+		if (*player == 'S')
+			data->player.angle = M_PI / 2;
+		data->player.orientation.x = cos(data->player.angle);
+		data->player.orientation.y = sin(data->player.angle);
+		data->player.pos = (t_fpoint){player - line, i / data->map.len};
 		*player = '0';
 		return (1);
 	}

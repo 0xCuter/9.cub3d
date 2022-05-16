@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 11:42:30 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 18:23:26 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,35 @@
 
 # include <stdio.h>
 # include <fcntl.h>
+# include <math.h>
 # include "libft.h"
 # include "get_next_line.h"
 # include "keymap.h"
 # include "mlx.h"
 
-# define SCREEN_WIDTH	500
-# define SCREEN_HEIGHT	500
-# define TILE_SIZE		10
+# define SCREEN_WIDTH			500
+# define SCREEN_HEIGHT			500
+# define TILE_SIZE				10
+# define PLAYER_SIZE			15
+# define PLAYER_SPEED			0.2
+# define PLAYER_ROTATE_SPEED	0.1
 
 enum e_tiles {
 	T_WALL = '1',
 	T_EMPTY = '0'
 };
 
-//Structure representing a point
+//Structure representing a point with ints
 typedef struct s_point {
 	int	x;
 	int	y;
 }	t_point;
+
+//Structure representing a point with floats
+typedef struct s_fpoint {
+	float	x;
+	float	y;
+}	t_fpoint;
 
 //Structure representing an mlx image
 typedef struct s_img {
@@ -64,8 +74,9 @@ typedef struct s_map {
 
 //Structure representing the player
 typedef struct s_player {
-	t_point	pos;
-	char	orientation;
+	t_fpoint	pos;
+	t_fpoint	orientation;
+	float		angle;
 }	t_player;
 
 //Structure holding the mlx's data

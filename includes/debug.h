@@ -6,14 +6,14 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 15:57:36 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 11:41:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 18:23:29 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEBUG_H
 # define DEBUG_H
 
-//map.c
 void	print_map(t_map *map);
+void	draw_line(t_img *img, int c, t_point p1, t_point p2);
 
 #endif

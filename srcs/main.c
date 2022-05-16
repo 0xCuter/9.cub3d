@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 11:45:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/16 18:39:42 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,11 @@ void	draw(t_mlx_data *mlx, t_map *map, t_player *player)
 	}
 	img_square_put(&mlx->img, rgb(0, 0, 255),
 		(t_point){player->pos.x * TILE_SIZE, player->pos.y * TILE_SIZE},
-		(t_point){TILE_SIZE, TILE_SIZE});
+		(t_point){PLAYER_SIZE, PLAYER_SIZE});
+	draw_line(&mlx->img, rgb(0, 255, 0),
+		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2, player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
+		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.x * 20,
+			player->pos.y * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.y * 20});
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img, 0, 0);
 }
 
