@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 12:08:57 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 17:38:24 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "get_next_line.h"
 # include "keymap.h"
 # include "mlx.h"
+# include <X11/X.h>
 
 # define SCREEN_WIDTH			500
 # define SCREEN_HEIGHT			500

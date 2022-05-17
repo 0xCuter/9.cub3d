@@ -6,19 +6,12 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:37:40 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 10:53:32 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 17:39:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYMAP_H
 # define KEYMAP_H
-
-//HOOKS
-# define KEY_PRESS_EVENT	2
-# define KEY_RELEASE_EVENT	3
-# define KEY_PRESS_MASK		1L
-# define KEY_RELEASE_MASK	2L
-# define DESTROY_EVENT		17
 
 //KEYBOARD
 # ifdef __unix__
