@@ -6,12 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 18:32:22 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 12:13:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
+//Inits player if it finds it in the map
 static char	find_player(t_data *data, char *line, int i)
 {
 	char	*player;
@@ -42,7 +43,7 @@ static char	find_player(t_data *data, char *line, int i)
 	return (0);
 }
 
-// Inits a t_map structure
+//Inits a `t_map` structure
 static void	fill_map(char *line, t_data *data, int fd)
 {
 	size_t	i;
@@ -74,6 +75,7 @@ void	init_data(char *map_name, t_data *data)
 	line = get_next_line(fd);
 	if (line == NULL)
 		exit_error("Could not read map\n", 1);
+	data->keys.keys_pressed_count = 0;
 	data->map.len = ft_strlen(line) - 1;
 	data->mlx_data.img.img = mlx_new_image(
 			data->mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -84,4 +86,19 @@ void	init_data(char *map_name, t_data *data)
 	if (data->map.map == NULL)
 		return ;
 	fill_map(line, data, fd);
+}
+
+//Called when pressing window close
+static int	exit_program()
+{
+	exit(0);
+}
+
+void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data)
+{
+	mlx_hook(win_ptr, KEY_PRESS_EVENT, KEY_PRESS_MASK, key_press_hook, &data->keys);
+	mlx_hook(win_ptr, KEY_RELEASE_EVENT, KEY_RELEASE_MASK, key_release_hook, &data->keys);
+	mlx_hook(win_ptr, DESTROY_EVENT, 0, exit_program, NULL);
+	mlx_loop_hook(mlx_ptr, main_loop, data);
+	mlx_loop(mlx_ptr);
 }

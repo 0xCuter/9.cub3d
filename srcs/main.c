@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 18:39:42 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 11:59:30 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,32 @@ void	draw(t_mlx_data *mlx, t_map *map, t_player *player)
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img, 0, 0);
 }
 
+int	main_loop(t_data *data)
+{
+	//REMOVE!
+	usleep(10000);
+
+	if (key_pressed(KEY_ESCAPE, &data->keys))
+		exit(0);
+	move_player(data, &data->keys);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
-	void	*mlx_ptr;
-	void	*win_ptr;
 	t_data	data;
 
 	if (argc == 2)
 	{
-		mlx_ptr = mlx_init();
-		if (mlx_ptr == NULL)
+		data.mlx_data.mlx_ptr = mlx_init();
+		if (data.mlx_data.mlx_ptr == NULL)
 			exit(-1);
-		win_ptr = mlx_new_window(mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "FdF");
-		if (win_ptr == NULL)
+		data.mlx_data.win_ptr = mlx_new_window(data.mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "FdF");
+		if (data.mlx_data.win_ptr == NULL)
 			exit(-1);
-		data.mlx_data.mlx_ptr = mlx_ptr;
-		data.mlx_data.win_ptr = win_ptr;
 		init_data(argv[1], &data);
 		draw(&data.mlx_data, &data.map, &data.player);
-		init_loop(mlx_ptr, win_ptr, &data);
+		init_loop(data.mlx_data.mlx_ptr, data.mlx_data.win_ptr, &data);
 	}
 	else if (argv && argv[0])
 	{

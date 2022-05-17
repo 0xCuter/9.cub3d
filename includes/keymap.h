@@ -6,18 +6,21 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:37:40 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 17:42:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 10:53:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef KEYMAP_H
 # define KEYMAP_H
 
-// MOUSE
-# define MOUSE_SCROLL_UP 4
-# define MOUSE_SCROLL_DOWN 5
+//HOOKS
+# define KEY_PRESS_EVENT	2
+# define KEY_RELEASE_EVENT	3
+# define KEY_PRESS_MASK		1L
+# define KEY_RELEASE_MASK	2L
+# define DESTROY_EVENT		17
 
-// KEYBOARD
+//KEYBOARD
 # ifdef __unix__
 #  define KEY_ESCAPE	65307
 #  define KEY_W			119

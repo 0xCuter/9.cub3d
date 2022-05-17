@@ -6,56 +6,60 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:07 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 18:34:26 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 12:09:36 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void	move_player(t_data *data, int keycode)
+char	key_pressed(int keycode, t_keys *keys)
 {
-	if (keycode == KEY_W)
-		data->player.pos.y -= PLAYER_SPEED;
-	else if (keycode == KEY_S)
-		data->player.pos.y += PLAYER_SPEED;
-	else if (keycode == KEY_A)
-		data->player.pos.x -= PLAYER_SPEED;
-	else if (keycode == KEY_D)
-		data->player.pos.x += PLAYER_SPEED;
-	else if (keycode == KEY_LEFT || keycode == KEY_RIGHT)
+	size_t	i;
+
+	i = 0;
+	while (i < keys->keys_pressed_count)
 	{
-		if (keycode == KEY_LEFT)
-		{
-			data->player.angle -= PLAYER_ROTATE_SPEED;
-			if (data->player.angle < 0)
-				data->player.angle = 2 * M_PI;
-		}
-		if (keycode == KEY_RIGHT)
-		{
-			data->player.angle += PLAYER_ROTATE_SPEED;
-			if (data->player.angle > 2 * M_PI)
-				data->player.angle = 0;
-		}
-		data->player.orientation.x = cos(data->player.angle);
-		data->player.orientation.y = sin(data->player.angle);
+		if (keys->keys[i] == keycode)
+			return (1);
+		++i;
 	}
-	draw(&data->mlx_data, &data->map, &data->player);
-}
-
-int	key_press_hook(int keycode, t_data *data)
-{
-	// printf("%i\n", keycode);
-	if (keycode == KEY_ESCAPE)
-		exit(0);
-	move_player(data, keycode);
 	return (0);
 }
 
-int	mouse_hook(int button, int x, int y, void *param)
+int	key_press_hook(int keycode, t_keys *keys)
 {
-	(void)button;
-	(void)x;
-	(void)y;
-	(void)param;
+	if (keys->keys_pressed_count == MAX_KEYS_PRESSED)
+		return (0);
+	keys->keys[keys->keys_pressed_count] = keycode;
+	++keys->keys_pressed_count;
 	return (0);
 }
+
+int	key_release_hook(int keycode, t_keys *keys)
+{
+	size_t	i;
+
+	if (keys->keys_pressed_count == 0)
+		return (0);
+	i = 0;
+	while (i < keys->keys_pressed_count)
+	{
+		if (keys->keys[i] == keycode)
+		{
+			keys->keys[i] = keys->keys[keys->keys_pressed_count - 1];
+			--keys->keys_pressed_count;
+			return (0);
+		}
+		++i;
+	}
+	return (0);
+}
+
+// int	mouse_hook(int button, int x, int y, void *param)
+// {
+// 	(void)button;
+// 	(void)x;
+// 	(void)y;
+// 	(void)param;
+// 	return (0);
+// }

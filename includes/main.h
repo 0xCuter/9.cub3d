@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 18:23:26 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 12:08:57 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define PLAYER_SIZE			15
 # define PLAYER_SPEED			0.2
 # define PLAYER_ROTATE_SPEED	0.1
+# define MAX_KEYS_PRESSED		5
 
 enum e_tiles {
 	T_WALL = '1',
@@ -54,18 +55,6 @@ typedef struct s_img {
 	int		endian;
 }	t_img;
 
-//Structure passed to mouse hook
-// typedef struct s_mouse_hook {
-// 	void			*mlx_ptr;
-// 	void			*win_ptr;
-// }	t_mouse_hook;
-
-//Structure passed to key hook
-// typedef struct s_key_hook {
-// 	void			*mlx_ptr;
-// 	void			*win_ptr;
-// }	t_key_hook;
-
 //Structure representing the map
 typedef struct s_map {
 	char	*map;
@@ -86,11 +75,18 @@ typedef struct s_mlx_data {
 	t_img	img;
 }	t_mlx_data;
 
+//Structure holding the pressed keys
+typedef struct s_keys {
+	int		keys[MAX_KEYS_PRESSED];
+	size_t	keys_pressed_count;
+}	t_keys;
+
 //Structure holding the program's data
 typedef struct s_data {
 	t_map		map;
 	t_player	player;
 	t_mlx_data	mlx_data;
+	t_keys		keys;
 }	t_data;
 
 //mlx/
@@ -99,13 +95,15 @@ typedef struct s_data {
 void	img_pixel_put(t_img *img, int color, t_point pos);
 //Draws a square on an mlx img
 void	img_square_put(t_img *img, int color, t_point pos, t_point size);
-//Sets up hooks and launches the mlx loop
-void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
 //Returns an int representing a color
 int		rgb(unsigned char r, unsigned char g, unsigned char b);
 //	hooks.c
-int		mouse_hook(int button, int x, int y, void *param);
-int		key_press_hook(int keycode, t_data *data);
+//Returns 1 if `keycode` is pressed
+char	key_pressed(int keycode, t_keys *keys);
+//Register key presses
+int		key_press_hook(int keycode, t_keys *keys);
+//Register key releases
+int		key_release_hook(int keycode, t_keys *keys);
 
 //utils.c
 //Prints error with `perror(s)` and exits `exit(i)`
@@ -114,11 +112,17 @@ void	exit_perror(char *s, int i);
 void	exit_error(char *s, int i);
 
 //init.c
-// Inits the `t_data` structure
+//Inits the `t_data` structure
 void	init_data(char *map_name, t_data *data);
+//Sets up hooks and launches the main loop
+void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
+
+//player.c
+void	move_player(t_data *data, t_keys *keys);
 
 //main.c
 void	draw(t_mlx_data *mlx_data, t_map *map, t_player *player);
+int		main_loop(t_data *data);
 
 //REMOVE!
 # include "debug.h"
