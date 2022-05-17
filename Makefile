@@ -6,14 +6,15 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/11 14:08:44 by vvandenb          #+#    #+#              #
-#    Updated: 2022/05/17 17:38:45 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/05/17 17:58:55 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror	\
 		-D BUFFER_SIZE=256		\
-		-I $(HEADERS_DIR) -I $(LIBFT_DIR) -I $(LIBX_DIR)
+		-I $(HEADERS_DIR) -I $(LIBFT_DIR) -I $(LIBX_DIR)	\
+		-I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Tk.framework/Versions/8.5/Headers/
 ifdef DEBUG
 	CFLAGS += -g 
 endif
@@ -23,8 +24,7 @@ endif
 
 SRCS_DIR = srcs/
 HEADERS_DIR = includes/
-HEADERS = $(HEADERS_DIR)main.h $(HEADERS_DIR)get_next_line.h $(HEADERS_DIR)debug.h	\
-		/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Tk.framework/Versions/8.5/Headers
+HEADERS = $(HEADERS_DIR)main.h $(HEADERS_DIR)get_next_line.h $(HEADERS_DIR)debug.h
 NAME = cub3D
 SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)init.c $(SRCS_DIR)utils.c $(SRCS_DIR)player.c	\
 		$(SRCS_DIR)mlx/mlx_utils.c $(SRCS_DIR)mlx/hooks.c	\
