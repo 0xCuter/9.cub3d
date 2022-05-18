@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/11 14:08:44 by vvandenb          #+#    #+#              #
-#    Updated: 2022/05/17 17:58:55 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/05/18 10:40:46 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ endif
 
 SRCS_DIR = srcs/
 HEADERS_DIR = includes/
-HEADERS = $(HEADERS_DIR)main.h $(HEADERS_DIR)get_next_line.h $(HEADERS_DIR)debug.h
+HEADERS = $(HEADERS_DIR)main.h $(HEADERS_DIR)get_next_line.h $(HEADERS_DIR)keymap.h $(HEADERS_DIR)debug.h
 NAME = cub3D
 SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)init.c $(SRCS_DIR)utils.c $(SRCS_DIR)player.c	\
 		$(SRCS_DIR)mlx/mlx_utils.c $(SRCS_DIR)mlx/hooks.c	\

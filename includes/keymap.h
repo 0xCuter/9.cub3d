@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:37:40 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 17:39:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:04:52 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #  define KEY_D			100
 #  define KEY_LEFT		65361
 #  define KEY_RIGHT		65363
+#  define KEY_DOWN		65362
+#  define KEY_UP		65364
 # endif
 
 # ifdef __APPLE__
@@ -32,6 +34,8 @@
 #  define KEY_D			2
 #  define KEY_LEFT		123
 #  define KEY_RIGHT		124
+#  define KEY_DOWN		125
+#  define KEY_UP		126
 # endif
 
 #endif

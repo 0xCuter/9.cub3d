@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 17:38:24 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:03:14 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@
 
 # define SCREEN_WIDTH			500
 # define SCREEN_HEIGHT			500
-# define TILE_SIZE				10
+# define TILE_SIZE				25
 # define PLAYER_SIZE			15
 # define PLAYER_SPEED			0.2
 # define PLAYER_ROTATE_SPEED	0.1
+# define S_FOV					60
+# define S_DOF					8
 # define MAX_KEYS_PRESSED		5
 
 enum e_tiles {
@@ -66,7 +68,7 @@ typedef struct s_map {
 typedef struct s_player {
 	t_fpoint	pos;
 	t_fpoint	orientation;
-	float		angle;
+	double		angle;
 }	t_player;
 
 //Structure holding the mlx's data
