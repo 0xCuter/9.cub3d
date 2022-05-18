@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/18 15:32:54 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/18 16:59:19 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,9 +185,9 @@ static int	exit_program()
 
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data)
 {
-	mlx_hook(win_ptr, KEY_PRESS_EVENT, KEY_PRESS_MASK, key_press_hook, &data->keys);
-	mlx_hook(win_ptr, KEY_RELEASE_EVENT, KEY_RELEASE_MASK, key_release_hook, &data->keys);
-	mlx_hook(win_ptr, DESTROY_EVENT, 0, exit_program, NULL);
+	mlx_hook(win_ptr, KeyPress, KeyPressMask, key_press_hook, &data->keys);
+	mlx_hook(win_ptr, KeyRelease, KeyReleaseMask, key_release_hook, &data->keys);
+	mlx_hook(win_ptr, DestroyNotify, 0, exit_program, NULL);
 	mlx_loop_hook(mlx_ptr, main_loop, data);
 	mlx_loop(mlx_ptr);
 }

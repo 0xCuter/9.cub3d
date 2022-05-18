@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 18:11:50 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/18 16:59:19 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "get_next_line.h"
 # include "keymap.h"
 # include "mlx.h"
+# include <X11/X.h>
 
 # define SCREEN_WIDTH			500
 # define SCREEN_HEIGHT			500

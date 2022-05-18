@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:07 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 12:09:36 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/17 17:41:36 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ char	key_pressed(int keycode, t_keys *keys)
 
 int	key_press_hook(int keycode, t_keys *keys)
 {
-	if (keys->keys_pressed_count == MAX_KEYS_PRESSED)
+	if (keys->keys_pressed_count == MAX_KEYS_PRESSED || key_pressed(keycode, keys))
 		return (0);
+	// printf("PRESSED: %i\n", keycode);
 	keys->keys[keys->keys_pressed_count] = keycode;
 	++keys->keys_pressed_count;
 	return (0);
@@ -39,8 +40,9 @@ int	key_release_hook(int keycode, t_keys *keys)
 {
 	size_t	i;
 
-	if (keys->keys_pressed_count == 0)
+	if (keys->keys_pressed_count == 0 || !key_pressed(keycode, keys))
 		return (0);
+	// printf("RELEASED: %i\n", keycode);
 	i = 0;
 	while (i < keys->keys_pressed_count)
 	{
