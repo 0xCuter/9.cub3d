@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/18 16:59:19 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/18 17:04:02 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@ static void	get_dimensions(char *line, t_data *data, int fd)
 	}
 	data->map.width = max_len;
 	data->map.height = i;
-	write(1, ft_itoa(i), 2);
-	write(1, "\n", 1);
-	write(1, ft_itoa(max_len), 2);
 	i = close(fd);
 	if (i)
 		exit_perror("CLOSE", i);
