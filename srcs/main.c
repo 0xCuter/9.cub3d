@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 11:59:30 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/18 01:01:51 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	draw(t_mlx_data *mlx, t_map *map, t_player *player)
 	char	tile;
 
 	y = 0;
-	while (y < map->len)
+	while (y < map->height)
 	{
 		x = 0;
-		while (x < map->len)
+		while (x < map->width)
 		{
-			tile = map->map[x + map->len * y];
+			tile = map->map[x + map->width * y];
 			img_square_put(&mlx->img, map_tile_color(tile),
 				(t_point){x * TILE_SIZE, y * TILE_SIZE},
 				(t_point){TILE_SIZE, TILE_SIZE});
@@ -71,7 +71,7 @@ int	main(int argc, char **argv)
 		data.mlx_data.mlx_ptr = mlx_init();
 		if (data.mlx_data.mlx_ptr == NULL)
 			exit(-1);
-		data.mlx_data.win_ptr = mlx_new_window(data.mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "FdF");
+		data.mlx_data.win_ptr = mlx_new_window(data.mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d");
 		if (data.mlx_data.win_ptr == NULL)
 			exit(-1);
 		init_data(argv[1], &data);
