@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 15:52:54 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/11 15:57:19 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/18 00:57:42 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	print_map(t_map *map)
 	size_t	j;
 
 	i = 0;
-	while (i < map->len)
+	while (i < map->height)
 	{
 		j = 0;
-		while (j < map->len)
+		while (j < map->width)
 		{
-			printf("%c", map->map[j + i * map->len]);
+			printf("%c", map->map[j + i * map->width]);
 			++j;
 		}
 		printf("$ (%li)\n", i);
