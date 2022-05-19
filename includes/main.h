@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/18 18:07:15 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/19 15:30:25 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,20 @@
 # include "mlx.h"
 # include <X11/X.h>
 
-# define SCREEN_WIDTH			500
-# define SCREEN_HEIGHT			500
+# define SCREEN_WIDTH			1500
+# define SCREEN_HEIGHT			800
 # define TILE_SIZE				25
 # define PLAYER_SIZE			15
-# define PLAYER_SPEED			0.2
-# define PLAYER_ROTATE_SPEED	0.1
-# define S_FOV					60
-# define S_DOF					8
+# define PLAYER_TILE_RATIO		(((float)PLAYER_SIZE / TILE_SIZE))
+# define PLAYER_SPEED			0.1f
+# define PLAYER_ROTATE_SPEED	0.05f
+# define MAX_RAY_LOOPS			10
 # define MAX_KEYS_PRESSED		5
+# define RAD1					0.0174532925f
+# define MAP_OFFSET				800
+
+# define S_FOV					60
+# define S_VIEW_DISTANCE		8
 
 enum e_tiles {
 	T_WALL = '1',
@@ -123,6 +128,9 @@ void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
 
 //player.c
 void	move_player(t_data *data, t_keys *keys);
+
+//raycast.c
+void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player);
 
 //main.c
 void	draw(t_mlx_data *mlx_data, t_map *map, t_player *player);
