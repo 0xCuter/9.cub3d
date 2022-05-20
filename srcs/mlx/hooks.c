@@ -6,13 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:07 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 17:41:36 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:03:15 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-char	key_pressed(int keycode, t_keys *keys)
+char	keyPressed(int keycode, t_keys *keys)
 {
 	size_t	i;
 
@@ -26,9 +26,9 @@ char	key_pressed(int keycode, t_keys *keys)
 	return (0);
 }
 
-int	key_press_hook(int keycode, t_keys *keys)
+int	keyPressHook(int keycode, t_keys *keys)
 {
-	if (keys->keys_pressed_count == MAX_KEYS_PRESSED || key_pressed(keycode, keys))
+	if (keys->keys_pressed_count == MAX_KEYS_PRESSED || keyPressed(keycode, keys))
 		return (0);
 	// printf("PRESSED: %i\n", keycode);
 	keys->keys[keys->keys_pressed_count] = keycode;
@@ -36,11 +36,11 @@ int	key_press_hook(int keycode, t_keys *keys)
 	return (0);
 }
 
-int	key_release_hook(int keycode, t_keys *keys)
+int	keyReleaseHook(int keycode, t_keys *keys)
 {
 	size_t	i;
 
-	if (keys->keys_pressed_count == 0 || !key_pressed(keycode, keys))
+	if (keys->keys_pressed_count == 0 || !keyPressed(keycode, keys))
 		return (0);
 	// printf("RELEASED: %i\n", keycode);
 	i = 0;

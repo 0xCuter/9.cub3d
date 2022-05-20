@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/19 15:30:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:01:26 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@
 # include "mlx.h"
 # include <X11/X.h>
 
-# define SCREEN_WIDTH			1500
-# define SCREEN_HEIGHT			800
-# define TILE_SIZE				25
-# define PLAYER_SIZE			15
+# define SCREEN_WIDTH			800
+# define SCREEN_HEIGHT			500
+# define GAME_WIDTH				600
+# define TILE_SIZE				15
+# define PLAYER_SIZE			5
 # define PLAYER_TILE_RATIO		(((float)PLAYER_SIZE / TILE_SIZE))
 # define PLAYER_SPEED			0.1f
 # define PLAYER_ROTATE_SPEED	0.05f
 # define MAX_RAY_LOOPS			10
 # define MAX_KEYS_PRESSED		5
 # define RAD1					0.0174532925f
-# define MAP_OFFSET				800
 
 # define S_FOV					60
 # define S_VIEW_DISTANCE		8
@@ -101,40 +101,42 @@ typedef struct s_data {
 //mlx/
 //	mlx_utils.c
 //Draws a pixel on an mlx img
-void	img_pixel_put(t_img *img, int color, t_point pos);
+void	imgPixelPut(t_img *img, int color, t_point pos);
 //Draws a square on an mlx img
-void	img_square_put(t_img *img, int color, t_point pos, t_point size);
+void	imgSquarePut(t_img *img, int color, t_point pos, t_point size);
 //Returns an int representing a color
 int		rgb(unsigned char r, unsigned char g, unsigned char b);
 //	hooks.c
 //Returns 1 if `keycode` is pressed
-char	key_pressed(int keycode, t_keys *keys);
+char	keyPressed(int keycode, t_keys *keys);
 //Register key presses
-int		key_press_hook(int keycode, t_keys *keys);
+int		keyPressHook(int keycode, t_keys *keys);
 //Register key releases
-int		key_release_hook(int keycode, t_keys *keys);
+int		keyReleaseHook(int keycode, t_keys *keys);
 
 //utils.c
 //Prints error with `perror(s)` and exits `exit(i)`
-void	exit_perror(char *s, int i);
+void	exitPerror(char *s, int i);
 //Prints error on `STDERR` and exits `exit(i)`
-void	exit_error(char *s, int i);
+void	exitError(char *s, int i);
 
 //init.c
 //Inits the `t_data` structure
-void	init_data(char *map_name, t_data *data);
+void	initData(char *map_name, t_data *data);
 //Sets up hooks and launches the main loop
-void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
+void	initLoop(void *mlx_ptr, void *win_ptr, t_data *data);
 
 //player.c
-void	move_player(t_data *data, t_keys *keys);
+void	movePlayer(t_data *data, t_keys *keys);
 
 //raycast.c
 void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player);
 
+//draw.c
+void	draw(t_data *data);
+
 //main.c
-void	draw(t_mlx_data *mlx_data, t_map *map, t_player *player);
-int		main_loop(t_data *data);
+int		mainLoop(t_data *data);
 
 //REMOVE!
 # include "debug.h"

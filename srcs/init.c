@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/18 18:08:08 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:04:20 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	get_dimensions(char *line, t_data *data, int fd)
 	data->map.height = i;
 	i = close(fd);
 	if (i)
-		exit_perror("CLOSE", i);
+		exitPerror("CLOSE", i);
 }
 
 // //Inits a `t_map` structure
@@ -86,7 +86,7 @@ static void	get_dimensions(char *line, t_data *data, int fd)
 // 		i += data->map.len;
 // 	}
 // 	if (!b_player_found)
-// 		exit_error("Could not find a player's start position\n", 1);
+// 		exitError("Could not find a player's start position\n", 1);
 // }
 
 //Inits a `t_map` structure
@@ -100,7 +100,7 @@ static void	fill_map(char *map_name, t_data *data, int fd)
 	player_found = 0;
 	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
-		exit_perror("MAP", fd);
+		exitPerror("MAP", fd);
 	line = get_next_line(fd);
 	i = 0;
 	while (line)
@@ -117,12 +117,12 @@ static void	fill_map(char *map_name, t_data *data, int fd)
 		}
 		free(line);
 		if (player_found > 1)
-			exit_error("More than one player present on the map\n", 1);
+			exitError("More than one player present on the map\n", 1);
 		line = get_next_line(fd);
 		i += data->map.width;
 	}
 	if (!player_found)
-		exit_error("Could not find a player's start position\n", 1);
+		exitError("Could not find a player's start position\n", 1);
 }
 
 static void	check_map(t_data *data)
@@ -139,30 +139,30 @@ static void	check_map(t_data *data)
 	while (i < height * width)
 	{
 		if (!ft_strchr("01 ", map[i]))
-			exit_error("Undefined charachter\n", 1);
+			exitError("Undefined charachter\n", 1);
 		if (map[i] == '0')
 		{
 			if (i < width || i > (height - 1) * width ||
 				i % width == 0 || i % width == width - 1 ||
 				map[i + 1] == ' ' || map[i - 1] == ' ' ||
 				map[i + width] == ' ' || map[i - width] == ' ')
-				exit_error("Map not closed\n", 1);
+				exitError("Map not closed\n", 1);
 		}
 		i++;
 	}
 }
 
-void	init_data(char *map_name, t_data *data)
+void	initData(char *map_name, t_data *data)
 {
 	int		fd;
 	char	*line;
 
 	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
-		exit_perror("MAP", fd);
+		exitPerror("MAP", fd);
 	line = get_next_line(fd);
 	if (line == NULL)
-		exit_error("Could not read map\n", 1);
+		exitError("Could not read map\n", 1);
 	data->keys.keys_pressed_count = 0;
 	get_dimensions(line, data, fd);
 	data->mlx_data.img.img = mlx_new_image(
@@ -177,7 +177,7 @@ void	init_data(char *map_name, t_data *data)
 	check_map(data);
 	fd = close(fd);
 	if (fd)
-		exit_perror("CLOSE", fd);
+		exitPerror("CLOSE", fd);
 }
 
 //Called when pressing window close
@@ -186,11 +186,11 @@ static int	exit_program()
 	exit(0);
 }
 
-void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data)
+void	initLoop(void *mlx_ptr, void *win_ptr, t_data *data)
 {
-	mlx_hook(win_ptr, KeyPress, KeyPressMask, key_press_hook, &data->keys);
-	mlx_hook(win_ptr, KeyRelease, KeyReleaseMask, key_release_hook, &data->keys);
+	mlx_hook(win_ptr, KeyPress, KeyPressMask, keyPressHook, &data->keys);
+	mlx_hook(win_ptr, KeyRelease, KeyReleaseMask, keyReleaseHook, &data->keys);
 	mlx_hook(win_ptr, DestroyNotify, 0, exit_program, NULL);
-	mlx_loop_hook(mlx_ptr, main_loop, data);
+	mlx_loop_hook(mlx_ptr, mainLoop, data);
 	mlx_loop(mlx_ptr);
 }

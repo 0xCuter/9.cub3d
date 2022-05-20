@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 09:49:44 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/16 18:14:46 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:01:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	plot_line_low(t_img *img, t_point *p, t_point d_p, int c)
 	d = 2 * d_p.y - d_p.x;
 	while (current_p.x <= p[1].x)
 	{
-		img_pixel_put(img, c, current_p);
+		imgPixelPut(img, c, current_p);
 		if (d > 0)
 		{
 			current_p.y += yi;
@@ -58,7 +58,7 @@ static void	plot_line_high(t_img *img, t_point *p, t_point d_p, int c)
 	d = 2 * d_p.x - d_p.y;
 	while (current_p.y <= p[1].y)
 	{
-		img_pixel_put(img, c, current_p);
+		imgPixelPut(img, c, current_p);
 		if (d > 0)
 		{
 			current_p.x += xi;
@@ -71,7 +71,7 @@ static void	plot_line_high(t_img *img, t_point *p, t_point d_p, int c)
 }
 
 // Draws a "color" line of between two points using Bresenham's line algorithm
-void	draw_line(t_img *img, int c, t_point p1, t_point p2)
+void	drawLine(t_img *img, int c, t_point p1, t_point p2)
 {
 	t_point	p[2];
 	t_point	p_reversed[2];

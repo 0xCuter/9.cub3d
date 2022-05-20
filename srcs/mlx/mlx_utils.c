@@ -6,13 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:13 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/17 12:08:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:01:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	img_pixel_put(t_img *img, int color, t_point pos)
+void	imgPixelPut(t_img *img, int color, t_point pos)
 {
 	char	*dst;
 
@@ -24,7 +24,7 @@ void	img_pixel_put(t_img *img, int color, t_point pos)
 	}
 }
 
-void	img_square_put(t_img *img, int color, t_point pos, t_point size)
+void	imgSquarePut(t_img *img, int color, t_point pos, t_point size)
 {
 	int	x;
 
@@ -33,7 +33,7 @@ void	img_square_put(t_img *img, int color, t_point pos, t_point size)
 		x = size.x;
 		while (x)
 		{
-			img_pixel_put(img, color,
+			imgPixelPut(img, color,
 				(t_point){pos.x + x - 1, pos.y + size.y - 1});
 			--x;
 		}

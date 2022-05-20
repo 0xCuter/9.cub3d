@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/19 15:30:41 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:01:04 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,28 @@ static float	distance(t_fpoint *p1, t_fpoint *p2)
 	return (sqrt((p1->y - p2->y) * (p1->y - p2->y) + (p1->x - p2->x) * (p1->x - p2->x)));
 }
 
-void	drawRay(t_img *img, t_player *player, int color, t_fpoint *ray)
+static void	drawRay(t_img *img, t_player *player, t_fpoint *ray, size_t i, float angle)
 {
-	draw_line(img, color,
-		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + MAP_OFFSET,
-			player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
-		(t_point){ray->x * TILE_SIZE + MAP_OFFSET, ray->y * TILE_SIZE});
+	float	dist;
+	int		color;
+	int		height;
+
+	imgSquarePut(img, rgb(0, 0, 0), (t_point){i * (GAME_WIDTH / S_FOV), 0}, (t_point){(GAME_WIDTH / S_FOV), SCREEN_HEIGHT});
+	if (ray->x == -1 && ray->y == -1)
+		return ;
+	dist = distance(&player->pos, ray);
+	if (dist <= S_VIEW_DISTANCE)
+	{
+		color = rgb(255.0 * (1 - dist / S_VIEW_DISTANCE), 0, 0);
+		height = SCREEN_HEIGHT / (dist * cos(angle));
+		if (height < 0 || height > SCREEN_HEIGHT)
+			height = SCREEN_HEIGHT;
+		drawLine(img, color,
+			(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + GAME_WIDTH,
+				player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
+			(t_point){ray->x * TILE_SIZE + GAME_WIDTH, ray->y * TILE_SIZE});
+		imgSquarePut(img, color, (t_point){i * (GAME_WIDTH / S_FOV), (SCREEN_HEIGHT - height) / 2}, (t_point){(GAME_WIDTH / S_FOV), height});
+	}
 }
 
 void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player)
@@ -122,15 +138,14 @@ void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player)
 	t_fpoint	ray;
 	float		angle;
 	size_t		i;
-	(void)ray;
 
-	i = S_FOV;
-	angle = player->angle - (RAD1 * (S_FOV / 2));
+	i = 0;
+	angle = player->angle + (RAD1 * (S_FOV / 2));
 	if (angle < 0)
 		angle += 2 * M_PI;
 	if (angle > 2 * M_PI)
 		angle -= 2 * M_PI;
-	while (i)
+	while (i < S_FOV)
 	{
 		ray_horizontal = check_horizontal(map, player, angle);
 		ray_vertical = check_vertical(map, player, angle);
@@ -142,10 +157,9 @@ void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player)
 			ray = ray_horizontal;
 		else
 			ray = ray_vertical;
-		if (ray.x != -1 && ray.y != -1 && distance(&player->pos, &ray) <= S_VIEW_DISTANCE)
-			drawRay(&mlx->img, player, rgb(0, 255, 0), &ray);
-		--i;
-		angle += RAD1;
+		drawRay(&mlx->img, player, &ray, i, player->angle - angle);
+		++i;
+		angle -= RAD1;
 		if (angle < 0)
 			angle += 2 * M_PI;
 		if (angle > 2 * M_PI)

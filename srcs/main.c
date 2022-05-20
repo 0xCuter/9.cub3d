@@ -6,62 +6,22 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/19 14:56:12 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/20 14:59:46 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static int	map_tile_color(int tile)
-{
-	if (tile == T_EMPTY)
-		return (rgb(200, 200, 200));
-	else if (tile == T_WALL)
-		return (rgb(255, 0, 0));
-	return (rgb(255, 255, 255));
-}
-
-void	draw(t_mlx_data *mlx, t_map *map, t_player *player)
-{
-	size_t	x;
-	size_t	y;
-	char	tile;
-
-	y = 0;
-	while (y < map->height)
-	{
-		x = 0;
-		while (x < map->width)
-		{
-			tile = map->map[x + map->width * y];
-			img_square_put(&mlx->img, map_tile_color(tile),
-				(t_point){x * TILE_SIZE + MAP_OFFSET, y * TILE_SIZE},
-				(t_point){TILE_SIZE, TILE_SIZE});
-			++x;
-		}
-		++y;
-	}
-	img_square_put(&mlx->img, rgb(0, 0, 255),
-		(t_point){player->pos.x * TILE_SIZE + MAP_OFFSET, player->pos.y * TILE_SIZE},
-		(t_point){PLAYER_SIZE, PLAYER_SIZE});
-	draw_line(&mlx->img, rgb(255, 0, 255),
-		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + MAP_OFFSET, player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
-		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.x * 10 + MAP_OFFSET,
-			player->pos.y * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.y * 10});
-	drawRays(mlx, map, player);
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->img.img, 0, 0);
-}
-
-int	main_loop(t_data *data)
+int	mainLoop(t_data *data)
 {
 	//REMOVE!
 	usleep(10000);
 
 	if (data->keys.keys_pressed_count)
 	{
-		if (key_pressed(KEY_ESCAPE, &data->keys))
+		if (keyPressed(KEY_ESCAPE, &data->keys))
 			exit(0);
-		move_player(data, &data->keys);
+		movePlayer(data, &data->keys);
 	}
 	return (0);
 }
@@ -78,9 +38,9 @@ int	main(int argc, char **argv)
 		data.mlx_data.win_ptr = mlx_new_window(data.mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d");
 		if (data.mlx_data.win_ptr == NULL)
 			exit(-1);
-		init_data(argv[1], &data);
-		draw(&data.mlx_data, &data.map, &data.player);
-		init_loop(data.mlx_data.mlx_ptr, data.mlx_data.win_ptr, &data);
+		initData(argv[1], &data);
+		draw(&data);
+		initLoop(data.mlx_data.mlx_ptr, data.mlx_data.win_ptr, &data);
 	}
 	else if (argv && argv[0])
 	{
