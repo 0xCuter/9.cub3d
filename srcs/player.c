@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:59:09 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 12:04:13 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/22 15:47:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,56 @@
 void	movePlayer(t_data *data, t_keys *keys)
 {
 	if (keyPressed(KEY_W, keys))
+	{
+		// if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] != T_WALL)
+		// 	data->player.pos.y -= PLAYER_SPEED;
 		data->player.pos.y -= PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.y = (int)(data->player.pos.y + 1);
+	}
 	if (keyPressed(KEY_S, keys))
+	{
 		data->player.pos.y += PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)(data->player.pos.y + PLAYER_TILE_RATIO) * data->map.width] == T_WALL)
+			data->player.pos.y = (int)(data->player.pos.y) + (1 - PLAYER_TILE_RATIO);
+	}
 	if (keyPressed(KEY_A, keys))
+	{
 		data->player.pos.x -= PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.x = (int)(data->player.pos.x + 1);
+	}
 	if (keyPressed(KEY_D, keys))
+	{
 		data->player.pos.x += PLAYER_SPEED;
+		if (data->map.map[(int)(data->player.pos.x + PLAYER_TILE_RATIO) + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.x = (int)(data->player.pos.x) + (1 - PLAYER_TILE_RATIO);
+	}
 	if (keyPressed(KEY_UP, keys))
 	{
-		data->player.pos.x -= data->player.orientation.x / 5;
-		data->player.pos.y -= data->player.orientation.y / 5;
+		data->player.pos.x += data->player.orientation.x * PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.x = (int)(data->player.pos.x + 1);
+		if (data->map.map[(int)(data->player.pos.x + PLAYER_TILE_RATIO) + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.x = (int)(data->player.pos.x) + (1 - PLAYER_TILE_RATIO);
+		data->player.pos.y += data->player.orientation.y * PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.y = (int)(data->player.pos.y + 1);
+		if (data->map.map[(int)data->player.pos.x + (int)(data->player.pos.y + PLAYER_TILE_RATIO) * data->map.width] == T_WALL)
+			data->player.pos.y = (int)(data->player.pos.y) + (1 - PLAYER_TILE_RATIO);
 	}
 	if (keyPressed(KEY_DOWN, keys))
 	{
-		data->player.pos.x += data->player.orientation.x / 5;
-		data->player.pos.y += data->player.orientation.y / 5;
+		data->player.pos.x -= data->player.orientation.x * PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.x = (int)(data->player.pos.x + 1);
+		if (data->map.map[(int)(data->player.pos.x + PLAYER_TILE_RATIO) + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.x = (int)(data->player.pos.x) + (1 - PLAYER_TILE_RATIO);
+		data->player.pos.y -= data->player.orientation.y * PLAYER_SPEED;
+		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
+			data->player.pos.y = (int)(data->player.pos.y + 1);
+		if (data->map.map[(int)data->player.pos.x + (int)(data->player.pos.y + PLAYER_TILE_RATIO) * data->map.width] == T_WALL)
+			data->player.pos.y = (int)(data->player.pos.y) + (1 - PLAYER_TILE_RATIO);
 	}
 	if (keyPressed(KEY_LEFT, keys) || keyPressed(KEY_RIGHT, keys))
 	{
@@ -49,5 +83,4 @@ void	movePlayer(t_data *data, t_keys *keys)
 		data->player.orientation.x = cos(data->player.angle);
 		data->player.orientation.y = -sin(data->player.angle);
 	}
-	draw(data);
 }
