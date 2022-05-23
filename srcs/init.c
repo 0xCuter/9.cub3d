@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 12:04:20 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 11:28:58 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,11 +152,33 @@ static void	check_map(t_data *data)
 	}
 }
 
+//Exits if the map does not end with ".cub"
+static void	checkFormat(char *name)
+{
+	size_t	len;
+
+	if (name)
+	{
+		len = ft_strlen(name);
+		if (len < 4)
+			exitError("Wrong map format\n", 1);
+		if (name[len - 4] != '.')
+			exitError("Wrong map format\n", 1);
+		if (name[len - 3] != 'c')
+			exitError("Wrong map format\n", 1);
+		if (name[len - 2] != 'u')
+			exitError("Wrong map format\n", 1);
+		if (name[len - 1] != 'b')
+			exitError("Wrong map format\n", 1);
+	}
+}
+
 void	initData(char *map_name, t_data *data)
 {
 	int		fd;
 	char	*line;
 
+	checkFormat(map_name);
 	fd = open(map_name, O_RDONLY);
 	if (fd < 0)
 		exitPerror("MAP", fd);
@@ -181,7 +203,7 @@ void	initData(char *map_name, t_data *data)
 }
 
 //Called when pressing window close
-static int	exit_program()
+static int	exitProgram()
 {
 	exit(0);
 }
@@ -190,7 +212,7 @@ void	initLoop(void *mlx_ptr, void *win_ptr, t_data *data)
 {
 	mlx_hook(win_ptr, KeyPress, KeyPressMask, keyPressHook, &data->keys);
 	mlx_hook(win_ptr, KeyRelease, KeyReleaseMask, keyReleaseHook, &data->keys);
-	mlx_hook(win_ptr, DestroyNotify, 0, exit_program, NULL);
+	mlx_hook(win_ptr, DestroyNotify, 0, exitProgram, NULL);
 	mlx_loop_hook(mlx_ptr, mainLoop, data);
 	mlx_loop(mlx_ptr);
 }
