@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:13 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 12:01:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 12:40:37 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	imgSquarePut(t_img *img, int color, t_point pos, t_point size)
 	}
 }
 
-int	rgb(unsigned char r, unsigned char g, unsigned char b)
+int	argb(unsigned char a, unsigned char r, unsigned char g, unsigned char b)
 {
-	return (r << 16 | g << 8 | b << 0);
+	return (a << 24 | r << 16 | g << 8 | b);
 }

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 15:01:26 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 12:40:37 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@
 # define MAX_RAY_LOOPS			10
 # define MAX_KEYS_PRESSED		5
 # define RAD1					0.0174532925f
+# define FLOOR_A				255
+# define FLOOR_R				128
+# define FLOOR_G				128
+# define FLOOR_B				128
 
 # define S_FOV					60
 # define S_VIEW_DISTANCE		8
@@ -105,7 +109,7 @@ void	imgPixelPut(t_img *img, int color, t_point pos);
 //Draws a square on an mlx img
 void	imgSquarePut(t_img *img, int color, t_point pos, t_point size);
 //Returns an int representing a color
-int		rgb(unsigned char r, unsigned char g, unsigned char b);
+int		argb(unsigned char a, unsigned char r, unsigned char g, unsigned char b);
 //	hooks.c
 //Returns 1 if `keycode` is pressed
 char	keyPressed(int keycode, t_keys *keys);

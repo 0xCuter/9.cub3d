@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 15:01:04 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 12:40:37 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,13 +113,13 @@ static void	drawRay(t_img *img, t_player *player, t_fpoint *ray, size_t i, float
 	int		color;
 	int		height;
 
-	imgSquarePut(img, rgb(0, 0, 0), (t_point){i * (GAME_WIDTH / S_FOV), 0}, (t_point){(GAME_WIDTH / S_FOV), SCREEN_HEIGHT});
+	imgSquarePut(img, argb(0, 0, 0, 0), (t_point){i * (GAME_WIDTH / S_FOV), 0}, (t_point){(GAME_WIDTH / S_FOV), SCREEN_HEIGHT});
 	if (ray->x == -1 && ray->y == -1)
 		return ;
 	dist = distance(&player->pos, ray);
 	if (dist <= S_VIEW_DISTANCE)
 	{
-		color = rgb(255.0 * (1 - dist / S_VIEW_DISTANCE), 0, 0);
+		color = argb(0, 255.0 * (1 - dist / S_VIEW_DISTANCE), 0, 0);
 		height = SCREEN_HEIGHT / (dist * cos(angle));
 		if (height < 0 || height > SCREEN_HEIGHT)
 			height = SCREEN_HEIGHT;
