@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:59:55 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 15:00:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 12:09:55 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	drawMap(t_mlx_data *mlx, t_map *map, t_player *player)
 	imgSquarePut(&mlx->img, rgb(0, 0, 255),
 		(t_point){player->pos.x * TILE_SIZE + GAME_WIDTH, player->pos.y * TILE_SIZE},
 		(t_point){PLAYER_SIZE, PLAYER_SIZE});
-	drawLine(&mlx->img, rgb(255, 0, 255),
+	drawLine(&mlx->img, rgb(0, 255, 0),
 		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + GAME_WIDTH, player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
 		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.x * 10 + GAME_WIDTH,
 			player->pos.y * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.y * 10});
