@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:59:55 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/23 12:40:37 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 13:14:45 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,18 @@ static void	drawMap(t_mlx_data *mlx, t_map *map, t_player *player)
 		(t_point){player->pos.x * TILE_SIZE + GAME_WIDTH, player->pos.y * TILE_SIZE},
 		(t_point){PLAYER_SIZE, PLAYER_SIZE});
 	drawLine(&mlx->img, argb(0, 0, 255, 0),
-		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + GAME_WIDTH, player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
-		(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.x * 10 + GAME_WIDTH,
-			player->pos.y * TILE_SIZE + PLAYER_SIZE / 2 + player->orientation.y * 10});
+		(t_point){player->pos.x * TILE_SIZE + GAME_WIDTH, player->pos.y * TILE_SIZE},
+		(t_point){player->pos.x * TILE_SIZE + player->orientation.x * 10 + GAME_WIDTH,
+			player->pos.y * TILE_SIZE + player->orientation.y * 10});
 }
 
 void	draw(t_data *data)
 {
 	drawMap(&data->mlx_data, &data->map, &data->player);
+	imgSquarePut(&data->mlx_data.img, argb(0, CEILING_R, CEILING_G, CEILING_B),
+		(t_point){0, 0}, (t_point){GAME_WIDTH, SCREEN_HEIGHT / 2});
+	imgSquarePut(&data->mlx_data.img, argb(0, FLOOR_R, FLOOR_G, FLOOR_B),
+		(t_point){0, SCREEN_HEIGHT / 2}, (t_point){GAME_WIDTH, SCREEN_HEIGHT / 2});
 	drawRays(&data->mlx_data, &data->map, &data->player);
 	mlx_put_image_to_window(data->mlx_data.mlx_ptr, data->mlx_data.win_ptr, data->mlx_data.img.img, 0, 0);
 }

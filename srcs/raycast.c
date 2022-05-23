@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/23 12:40:37 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 13:20:20 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ static t_fpoint	check_horizontal(t_map *map, t_player *player, float angle)
 	//Looking up
 	if (angle < M_PI)
 	{
-		ray.y = (int)(player->pos.y + (PLAYER_TILE_RATIO / 2));
-		ray.x = ((player->pos.y + (PLAYER_TILE_RATIO / 2)) - ray.y) * (1 / tan(angle)) + player->pos.x + (PLAYER_TILE_RATIO / 2);
+		ray.y = (int)player->pos.y;
+		ray.x = (player->pos.y - ray.y) * (1 / tan(angle)) + player->pos.x;
 		offset.y = -1;
 	}
 	//Looking down
 	else if (angle > M_PI)
 	{
-		ray.y = (int)(player->pos.y + (PLAYER_TILE_RATIO / 2)) + 1;
-		ray.x = ((player->pos.y + (PLAYER_TILE_RATIO / 2)) - ray.y) * (1 / tan(angle)) + player->pos.x + (PLAYER_TILE_RATIO / 2);
+		ray.y = (int)player->pos.y + 1;
+		ray.x = (player->pos.y - ray.y) * (1 / tan(angle)) + player->pos.x;
 		offset.y = 1;
 	}
 	offset.x = -offset.y * (1 / tan(angle));
@@ -70,15 +70,15 @@ static t_fpoint	check_vertical(t_map *map, t_player *player, float angle)
 	//Looking left
 	if (angle > M_PI / 2 && angle < M_PI * 3 / 2)
 	{
-		ray.x = (int)(player->pos.x + (PLAYER_TILE_RATIO / 2));
-		ray.y = ((player->pos.x + (PLAYER_TILE_RATIO / 2)) - ray.x) * tan(angle) + player->pos.y + (PLAYER_TILE_RATIO / 2);
+		ray.x = (int)player->pos.x;
+		ray.y = (player->pos.x - ray.x) * tan(angle) + player->pos.y;
 		offset.x = -1;
 	}
 	//Looking right
 	else if (angle < M_PI / 2 || angle > M_PI * 3 / 2)
 	{
-		ray.x = (int)(player->pos.x + (PLAYER_TILE_RATIO / 2)) + 1;
-		ray.y = ((player->pos.x + (PLAYER_TILE_RATIO / 2)) - ray.x) * tan(angle) + player->pos.y + (PLAYER_TILE_RATIO / 2);
+		ray.x = (int)player->pos.x + 1;
+		ray.y = (player->pos.x - ray.x) * tan(angle) + player->pos.y;
 		offset.x = 1;
 	}
 	offset.y = -offset.x * tan(angle);
@@ -113,19 +113,18 @@ static void	drawRay(t_img *img, t_player *player, t_fpoint *ray, size_t i, float
 	int		color;
 	int		height;
 
-	imgSquarePut(img, argb(0, 0, 0, 0), (t_point){i * (GAME_WIDTH / S_FOV), 0}, (t_point){(GAME_WIDTH / S_FOV), SCREEN_HEIGHT});
 	if (ray->x == -1 && ray->y == -1)
 		return ;
 	dist = distance(&player->pos, ray);
 	if (dist <= S_VIEW_DISTANCE)
 	{
-		color = argb(0, 255.0 * (1 - dist / S_VIEW_DISTANCE), 0, 0);
+		color = argb(0, 200.0f * (1 - dist / S_VIEW_DISTANCE), 65.0f * (1 - dist / S_VIEW_DISTANCE), 47.0f * (1 - dist / S_VIEW_DISTANCE));
 		height = SCREEN_HEIGHT / (dist * cos(angle));
 		if (height < 0 || height > SCREEN_HEIGHT)
 			height = SCREEN_HEIGHT;
 		drawLine(img, color,
-			(t_point){player->pos.x * TILE_SIZE + PLAYER_SIZE / 2 + GAME_WIDTH,
-				player->pos.y * TILE_SIZE + PLAYER_SIZE / 2},
+			(t_point){player->pos.x * TILE_SIZE  + GAME_WIDTH,
+				player->pos.y * TILE_SIZE},
 			(t_point){ray->x * TILE_SIZE + GAME_WIDTH, ray->y * TILE_SIZE});
 		imgSquarePut(img, color, (t_point){i * (GAME_WIDTH / S_FOV), (SCREEN_HEIGHT - height) / 2}, (t_point){(GAME_WIDTH / S_FOV), height});
 	}

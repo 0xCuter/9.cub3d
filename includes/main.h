@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/23 12:40:37 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/23 13:19:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,23 @@
 # define SCREEN_HEIGHT			500
 # define GAME_WIDTH				600
 # define TILE_SIZE				15
-# define PLAYER_SIZE			5
+# define PLAYER_SIZE			15
 # define PLAYER_TILE_RATIO		(((float)PLAYER_SIZE / TILE_SIZE))
 # define PLAYER_SPEED			0.1f
 # define PLAYER_ROTATE_SPEED	0.05f
 # define MAX_RAY_LOOPS			10
 # define MAX_KEYS_PRESSED		5
 # define RAD1					0.0174532925f
-# define FLOOR_A				255
-# define FLOOR_R				128
-# define FLOOR_G				128
-# define FLOOR_B				128
 
+//COLORS
+# define CEILING_R				113
+# define CEILING_G				205
+# define CEILING_B				241
+# define FLOOR_R				72
+# define FLOOR_G				111
+# define FLOOR_B				56
+
+//SETTINGS
 # define S_FOV					60
 # define S_VIEW_DISTANCE		8
 
