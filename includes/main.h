@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/23 13:19:54 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 10:44:47 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,8 @@ int		keyReleaseHook(int keycode, t_keys *keys);
 void	exitPerror(char *s, int i);
 //Prints error on `STDERR` and exits `exit(i)`
 void	exitError(char *s, int i);
+//"Fixes" an angle greater than 2PI or less than 0
+void	fixAngle(double *angle);
 
 //init.c
 //Inits the `t_data` structure

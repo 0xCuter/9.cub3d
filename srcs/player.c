@@ -6,78 +6,49 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:59:09 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/23 12:08:50 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 10:46:28 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
+static void	move(t_player *player, t_map *map, double angle)
+{
+	t_fpoint	orientation;
+
+	orientation.x = cos(angle);
+	orientation.y = -sin(angle);
+	player->pos.x += orientation.x * PLAYER_SPEED;
+	if (map->map[(int)(player->pos.x - 0.1) + (int)player->pos.y * map->width] == T_WALL)
+		player->pos.x = (int)player->pos.x + 0.1;
+	if (map->map[(int)(player->pos.x + 0.1) + (int)player->pos.y * map->width] == T_WALL)
+		player->pos.x = (int)(player->pos.x + 1) - 0.1;
+	player->pos.y += orientation.y * PLAYER_SPEED;
+	if (map->map[(int)player->pos.x + (int)(player->pos.y - 0.1) * map->width] == T_WALL)
+		player->pos.y = (int)player->pos.y + 0.1;
+	if (map->map[(int)player->pos.x + (int)(player->pos.y + 0.1) * map->width] == T_WALL)
+		player->pos.y = (int)(player->pos.y + 1) - 0.1;
+}
+
 void	movePlayer(t_data *data, t_keys *keys)
 {
-	if (keyPressed(KEY_W, keys) && !keyPressed(KEY_S, keys))
-	{
-		data->player.pos.y -= PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.y = (int)(data->player.pos.y + 1);
-	}
-	if (keyPressed(KEY_S, keys) && !keyPressed(KEY_W, keys))
-	{
-		data->player.pos.y += PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)(data->player.pos.y + PLAYER_TILE_RATIO) * data->map.width] == T_WALL)
-			data->player.pos.y = (int)(data->player.pos.y) + (1 - PLAYER_TILE_RATIO);
-	}
 	if (keyPressed(KEY_A, keys) && !keyPressed(KEY_D, keys))
-	{
-		data->player.pos.x -= PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.x = (int)(data->player.pos.x + 1);
-	}
+		move(&data->player, &data->map, data->player.angle + M_PI / 2);
 	if (keyPressed(KEY_D, keys) && !keyPressed(KEY_A, keys))
-	{
-		data->player.pos.x += PLAYER_SPEED;
-		if (data->map.map[(int)(data->player.pos.x + PLAYER_TILE_RATIO) + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.x = (int)(data->player.pos.x) + (1 - PLAYER_TILE_RATIO);
-	}
-	if (keyPressed(KEY_UP, keys) && !keyPressed(KEY_DOWN, keys))
-	{
-		data->player.pos.x += data->player.orientation.x * PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.x = (int)(data->player.pos.x + 1);
-		else if (data->map.map[(int)(data->player.pos.x + PLAYER_TILE_RATIO) + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.x = (int)(data->player.pos.x) + (1 - PLAYER_TILE_RATIO);
-		data->player.pos.y += data->player.orientation.y * PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.y = (int)(data->player.pos.y + 1);
-		else if (data->map.map[(int)data->player.pos.x + (int)(data->player.pos.y + PLAYER_TILE_RATIO) * data->map.width] == T_WALL)
-			data->player.pos.y = (int)(data->player.pos.y) + (1 - PLAYER_TILE_RATIO);
-	}
-	if (keyPressed(KEY_DOWN, keys) && !keyPressed(KEY_UP, keys))
-	{
-		data->player.pos.x -= data->player.orientation.x * PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.x = (int)(data->player.pos.x + 1);
-		else if (data->map.map[(int)(data->player.pos.x + PLAYER_TILE_RATIO) + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.x = (int)(data->player.pos.x) + (1 - PLAYER_TILE_RATIO);
-		data->player.pos.y -= data->player.orientation.y * PLAYER_SPEED;
-		if (data->map.map[(int)data->player.pos.x + (int)data->player.pos.y * data->map.width] == T_WALL)
-			data->player.pos.y = (int)(data->player.pos.y + 1);
-		else if (data->map.map[(int)data->player.pos.x + (int)(data->player.pos.y + PLAYER_TILE_RATIO) * data->map.width] == T_WALL)
-			data->player.pos.y = (int)(data->player.pos.y) + (1 - PLAYER_TILE_RATIO);
-	}
+		move(&data->player, &data->map, data->player.angle - M_PI / 2);
+	if ((keyPressed(KEY_UP, keys) && !keyPressed(KEY_DOWN, keys))
+		|| (keyPressed(KEY_W, keys) && !keyPressed(KEY_S, keys)))
+		move(&data->player, &data->map, data->player.angle);
+	if ((keyPressed(KEY_DOWN, keys) && !keyPressed(KEY_UP, keys))
+		|| (keyPressed(KEY_S, keys) && !keyPressed(KEY_W, keys)))
+		move(&data->player, &data->map, data->player.angle - M_PI);
 	if (keyPressed(KEY_LEFT, keys) || keyPressed(KEY_RIGHT, keys))
 	{
 		if (keyPressed(KEY_RIGHT, keys))
-		{
 			data->player.angle -= PLAYER_ROTATE_SPEED;
-			if (data->player.angle < 0)
-				data->player.angle += 2 * M_PI;
-		}
 		if (keyPressed(KEY_LEFT, keys))
-		{
 			data->player.angle += PLAYER_ROTATE_SPEED;
-			if (data->player.angle >= 2 * M_PI)
-				data->player.angle -= 2 * M_PI;
-		}
+		fixAngle(&data->player.angle);
 		data->player.orientation.x = cos(data->player.angle);
 		data->player.orientation.y = -sin(data->player.angle);
 	}

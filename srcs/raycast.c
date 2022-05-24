@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/23 13:20:20 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 10:55:47 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,15 +135,12 @@ void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player)
 	t_fpoint	ray_horizontal;
 	t_fpoint	ray_vertical;
 	t_fpoint	ray;
-	float		angle;
+	double		angle;
 	size_t		i;
 
 	i = 0;
 	angle = player->angle + (RAD1 * (S_FOV / 2));
-	if (angle < 0)
-		angle += 2 * M_PI;
-	if (angle > 2 * M_PI)
-		angle -= 2 * M_PI;
+	fixAngle(&angle);
 	while (i < S_FOV)
 	{
 		ray_horizontal = check_horizontal(map, player, angle);
@@ -159,9 +156,6 @@ void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player)
 		drawRay(&mlx->img, player, &ray, i, player->angle - angle);
 		++i;
 		angle -= RAD1;
-		if (angle < 0)
-			angle += 2 * M_PI;
-		if (angle > 2 * M_PI)
-			angle -= 2 * M_PI;
+		fixAngle(&angle);
 	}
 }
