@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 11:04:41 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 16:38:51 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@
 # define SCREEN_HEIGHT			500
 # define GAME_WIDTH				600
 # define TILE_SIZE				15
-# define PLAYER_SIZE			15
-# define PLAYER_TILE_RATIO		(((float)PLAYER_SIZE / TILE_SIZE))
+# define PLAYER_SIZE			2
 # define PLAYER_SPEED			0.1f
 # define PLAYER_ROTATE_SPEED	0.05f
 # define MAX_RAY_LOOPS			10
@@ -138,7 +137,7 @@ void	init_data(char *map_name, t_data *data);
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
 
 //player.c
-void	move_player(t_data *data, t_keys *keys);
+void	control_player(t_data *data, t_keys *keys);
 
 //raycast.c
 void	draw_rays(t_mlx_data *mlx, t_map *map, t_player *player);

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 11:01:29 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 16:39:40 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main_loop(t_data *data)
 	{
 		if (key_pressed(KEY_ESCAPE, &data->keys))
 			exit(0);
-		move_player(data, &data->keys);
+		control_player(data, &data->keys);
 		draw(data);
 	}
 	return (0);

@@ -6,35 +6,32 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:59:09 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 11:10:23 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 16:39:38 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
+//Moves player if no collisions are detected
 static void	move(t_player *player, t_map *map, double angle)
 {
 	t_fpoint	orientation;
+	t_fpoint	prev_pos;
 
 	orientation.x = cos(angle);
 	orientation.y = -sin(angle);
+	prev_pos = player->pos;
 	player->pos.x += orientation.x * PLAYER_SPEED;
-	if (map->map[(int)(player->pos.x - 0.1) + (int)player->pos.y * map->width]
+	if (map->map[(int)player->pos.x + (int)player->pos.y * map->width]
 		== T_WALL)
-		player->pos.x = (int)player->pos.x + 0.1;
-	if (map->map[(int)(player->pos.x + 0.1) + (int)player->pos.y * map->width]
-		== T_WALL)
-		player->pos.x = (int)(player->pos.x + 1) - 0.1;
+		player->pos.x = prev_pos.x;
 	player->pos.y += orientation.y * PLAYER_SPEED;
-	if (map->map[(int)player->pos.x + (int)(player->pos.y - 0.1) * map->width]
+	if (map->map[(int)player->pos.x + (int)player->pos.y * map->width]
 		== T_WALL)
-		player->pos.y = (int)player->pos.y + 0.1;
-	if (map->map[(int)player->pos.x + (int)(player->pos.y + 0.1) * map->width]
-		== T_WALL)
-		player->pos.y = (int)(player->pos.y + 1) - 0.1;
+		player->pos.y = prev_pos.y;
 }
 
-void	move_player(t_data *data, t_keys *keys)
+void	control_player(t_data *data, t_keys *keys)
 {
 	if (key_pressed(KEY_A, keys) && !key_pressed(KEY_D, keys))
 		move(&data->player, &data->map, data->player.angle + M_PI / 2);
