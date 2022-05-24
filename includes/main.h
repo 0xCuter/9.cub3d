@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 10:44:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 11:04:41 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_map {
 
 //Structure representing the player
 typedef struct s_player {
-	t_fpoint	pos;
+	t_fpoint	pos; 
 	t_fpoint	orientation;
 	double		angle;
 }	t_player;
@@ -110,44 +110,44 @@ typedef struct s_data {
 //mlx/
 //	mlx_utils.c
 //Draws a pixel on an mlx img
-void	imgPixelPut(t_img *img, int color, t_point pos);
+void	img_pixel_put(t_img *img, int color, t_point pos);
 //Draws a square on an mlx img
-void	imgSquarePut(t_img *img, int color, t_point pos, t_point size);
+void	img_square_put(t_img *img, int color, t_point pos, t_point size);
 //Returns an int representing a color
 int		argb(unsigned char a, unsigned char r, unsigned char g, unsigned char b);
 //	hooks.c
 //Returns 1 if `keycode` is pressed
-char	keyPressed(int keycode, t_keys *keys);
+char	key_pressed(int keycode, t_keys *keys);
 //Register key presses
-int		keyPressHook(int keycode, t_keys *keys);
+int		key_press_hook(int keycode, t_keys *keys);
 //Register key releases
-int		keyReleaseHook(int keycode, t_keys *keys);
+int		key_release_hook(int keycode, t_keys *keys);
 
 //utils.c
 //Prints error with `perror(s)` and exits `exit(i)`
-void	exitPerror(char *s, int i);
+void	exit_perror(char *s, int i);
 //Prints error on `STDERR` and exits `exit(i)`
-void	exitError(char *s, int i);
+void	exit_error(char *s, int i);
 //"Fixes" an angle greater than 2PI or less than 0
-void	fixAngle(double *angle);
+void	fix_angle(double *angle);
 
 //init.c
 //Inits the `t_data` structure
-void	initData(char *map_name, t_data *data);
+void	init_data(char *map_name, t_data *data);
 //Sets up hooks and launches the main loop
-void	initLoop(void *mlx_ptr, void *win_ptr, t_data *data);
+void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
 
 //player.c
-void	movePlayer(t_data *data, t_keys *keys);
+void	move_player(t_data *data, t_keys *keys);
 
 //raycast.c
-void	drawRays(t_mlx_data *mlx, t_map *map, t_player *player);
+void	draw_rays(t_mlx_data *mlx, t_map *map, t_player *player);
 
 //draw.c
 void	draw(t_data *data);
 
 //main.c
-int		mainLoop(t_data *data);
+int		main_loop(t_data *data);
 
 //REMOVE!
 # include "debug.h"

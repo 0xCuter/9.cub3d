@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 09:49:44 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/20 12:01:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 11:21:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	plot_line_low(t_img *img, t_point *p, t_point d_p, int c)
 	d = 2 * d_p.y - d_p.x;
 	while (current_p.x <= p[1].x)
 	{
-		imgPixelPut(img, c, current_p);
+		img_pixel_put(img, c, current_p);
 		if (d > 0)
 		{
 			current_p.y += yi;
@@ -58,7 +58,7 @@ static void	plot_line_high(t_img *img, t_point *p, t_point d_p, int c)
 	d = 2 * d_p.x - d_p.y;
 	while (current_p.y <= p[1].y)
 	{
-		imgPixelPut(img, c, current_p);
+		img_pixel_put(img, c, current_p);
 		if (d > 0)
 		{
 			current_p.x += xi;
@@ -70,8 +70,19 @@ static void	plot_line_high(t_img *img, t_point *p, t_point d_p, int c)
 	}
 }
 
+static void	set_points(t_point *p,
+	t_point *p_reversed, t_point *d_p, t_point *d_p_reversed)
+{
+	p_reversed[0] = (t_point){p[1].x, p[1].y};
+	p_reversed[1] = (t_point){p[0].x, p[0].y};
+	d_p->x = p[1].x - p[0].x;
+	d_p_reversed->x = p_reversed[1].x - p_reversed[0].x;
+	d_p->y = p[1].y - p[0].y;
+	d_p_reversed->y = p_reversed[1].y - p_reversed[0].y;
+}
+
 // Draws a "color" line of between two points using Bresenham's line algorithm
-void	drawLine(t_img *img, int c, t_point p1, t_point p2)
+void	draw_line(t_img *img, int c, t_point p1, t_point p2)
 {
 	t_point	p[2];
 	t_point	p_reversed[2];
@@ -80,12 +91,7 @@ void	drawLine(t_img *img, int c, t_point p1, t_point p2)
 
 	p[0] = (t_point){p1.x, p1.y};
 	p[1] = (t_point){p2.x, p2.y};
-	p_reversed[0] = (t_point){p2.x, p2.y};
-	p_reversed[1] = (t_point){p1.x, p1.y};
-	d_p.x = p2.x - p1.x;
-	d_p_reversed.x = p_reversed[1].x - p_reversed[0].x;
-	d_p.y = p2.y - p1.y;
-	d_p_reversed.y = p_reversed[1].y - p_reversed[0].y;
+	set_points(p, p_reversed, &d_p, &d_p_reversed);
 	if (abs(d_p.y) < abs(d_p.x))
 	{
 		if (p1.x > p2.x)
