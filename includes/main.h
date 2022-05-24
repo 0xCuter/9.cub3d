@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 16:38:51 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:19:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,19 +122,32 @@ int		key_press_hook(int keycode, t_keys *keys);
 //Register key releases
 int		key_release_hook(int keycode, t_keys *keys);
 
-//utils.c
-//Prints error with `perror(s)` and exits `exit(i)`
-void	exit_perror(char *s, int i);
-//Prints error on `STDERR` and exits `exit(i)`
-void	exit_error(char *s, int i);
-//"Fixes" an angle greater than 2PI or less than 0
-void	fix_angle(double *angle);
-
-//init.c
+//init/
+//	init.c
 //Inits the `t_data` structure
 void	init_data(char *map_name, t_data *data);
 //Sets up hooks and launches the main loop
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
+//	init_map.c
+void	init_map(t_data *data, char *line, int fd, char *map_name);
+//	init_infos.c
+void	init_infos(t_data *data, char *line, int fd);
+
+//utils_exit.c
+//Prints error with `perror(s)` and exits `exit(i)`
+void	exit_perror(char *s, int i);
+//Prints error on `STDERR` and exits `exit(i)`
+void	exit_error(char *s, int i);
+//Same as `exit_error()` but also closes `fd`
+void	exit_close_error(char *s, int i, int fd);
+
+//utils.c
+//"Fixes" an angle greater than 2PI or less than 0
+void	fix_angle(double *angle);
+//Same as `open()`, but exits on error
+int		safe_open(char *file_name, int flags);
+//Same as `close()`, but exits on error
+void	safe_close(int fd);
 
 //player.c
 void	control_player(t_data *data, t_keys *keys);

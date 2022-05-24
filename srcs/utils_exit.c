@@ -1,37 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/16 10:17:42 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 18:13:03 by vvandenb         ###   ########.fr       */
+/*   Created: 2022/05/24 18:05:29 by vvandenb          #+#    #+#             */
+/*   Updated: 2022/05/24 18:13:16 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	fix_angle(double *angle)
+void	exit_perror(char *s, int i)
 {
-	if (*angle < 0)
-		*angle += 2 * M_PI;
-	if (*angle >= 2 * M_PI)
-		*angle -= 2 * M_PI;
+	perror(s);
+	exit(i);
 }
 
-int	safe_open(char *file_name, int flags)
+void	exit_error(char *s, int i)
 {
-	int	fd;
-
-	fd = open(file_name, flags);
-	if (fd < 0)
-		exit_perror(file_name, fd);
-	return (fd);
+	ft_putstr_fd(s, STDERR_FILENO);
+	exit(i);
 }
 
-void	safe_close(int fd)
+void	exit_close_error(char *s, int i, int fd)
 {
-	if (close(fd))
-		exit_perror("CLOSE", fd);
+	safe_close(fd);
+	ft_putstr_fd(s, STDERR_FILENO);
+	exit(i);
 }
