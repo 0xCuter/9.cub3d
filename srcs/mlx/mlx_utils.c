@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:31:13 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 11:08:43 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/25 16:46:01 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	img_square_put(t_img *img, int color, t_point pos, t_point size)
 {
 	int	x;
 
-	while (size.y)
+	while (size.y > 0)
 	{
 		x = size.x;
-		while (x)
+		while (x > 0)
 		{
 			img_pixel_put(img, color,
 				(t_point){pos.x + x - 1, pos.y + size.y - 1});

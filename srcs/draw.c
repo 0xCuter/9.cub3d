@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:59:55 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 11:22:27 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/25 16:39:17 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ static int	map_tile_color(int tile)
 //Draws minimap with player
 static void	draw_map(t_mlx_data *mlx, t_map *map, t_player *player)
 {
+	// (void)map;
 	size_t	x;
 	size_t	y;
-	char	tile;
 
 	y = 0;
 	while (y < map->height)
@@ -35,8 +35,7 @@ static void	draw_map(t_mlx_data *mlx, t_map *map, t_player *player)
 		x = 0;
 		while (x < map->width)
 		{
-			tile = map->map[x + map->width * y];
-			img_square_put(&mlx->img, map_tile_color(tile),
+			img_square_put(&mlx->img, map_tile_color(map->map[x + map->width * y]),
 				(t_point){x * TILE_SIZE + GAME_WIDTH, y * TILE_SIZE},
 				(t_point){TILE_SIZE, TILE_SIZE});
 			++x;
@@ -56,9 +55,16 @@ void	draw(t_data *data)
 {
 	draw_map(&data->mlx_data, &data->map, &data->player);
 	img_square_put(&data->mlx_data.img, argb(0, CEILING_R, CEILING_G, CEILING_B),
-		(t_point){0, 0}, (t_point){GAME_WIDTH, SCREEN_HEIGHT / 2});
+		(t_point){0, 0}, (t_point){GAME_WIDTH, SCREEN_HEIGHT * data->player.vertical_angle});
 	img_square_put(&data->mlx_data.img, argb(0, FLOOR_R, FLOOR_G, FLOOR_B),
-		(t_point){0, SCREEN_HEIGHT / 2}, (t_point){GAME_WIDTH, SCREEN_HEIGHT / 2});
+		(t_point){0, SCREEN_HEIGHT * data->player.vertical_angle}, (t_point){GAME_WIDTH, SCREEN_HEIGHT - (SCREEN_HEIGHT * data->player.vertical_angle)});
 	draw_rays(&data->mlx_data, &data->map, &data->player);
+
+	// int w, h;
+	// static void	*wall1 = NULL;
+	// if (wall1 == NULL)
+	// 	wall1 = mlx_xpm_file_to_image(data->mlx_data.mlx_ptr, "./textures/wall1.xpm", &w, &h);
+	// mlx_put_image_to_window(data->mlx_data.mlx_ptr, data->mlx_data.win_ptr, wall1, 0, 0);
+
 	mlx_put_image_to_window(data->mlx_data.mlx_ptr, data->mlx_data.win_ptr, data->mlx_data.img.img, 0, 0);
 }

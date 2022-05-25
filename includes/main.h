@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 18:19:16 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/25 16:30:17 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # define TILE_SIZE				15
 # define PLAYER_SIZE			2
 # define PLAYER_SPEED			0.1f
+# define PLAYER_VERTICAL_SPEED	0.05f
 # define PLAYER_ROTATE_SPEED	0.05f
-# define MAX_RAY_LOOPS			10
 # define MAX_KEYS_PRESSED		5
 # define RAD1					0.0174532925f
 
@@ -83,6 +83,7 @@ typedef struct s_player {
 	t_fpoint	pos; 
 	t_fpoint	orientation;
 	double		angle;
+	float		vertical_angle;
 }	t_player;
 
 //Structure holding the mlx's data
