@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/25 15:58:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/27 02:40:42 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-//Exits if the file does not end with ".cub"
-static void	check_format(char *name, int fd)
+//Exits if the file does not have the correct extension
+void	check_ext(char *name, char *ext, int fd)
 {
 	size_t	len;
 
@@ -22,24 +22,25 @@ static void	check_format(char *name, int fd)
 		len = ft_strlen(name);
 		if (len < 4
 			|| name[len - 4] != '.'
-			|| name[len - 3] != 'c'
-			|| name[len - 2] != 'u'
-			|| name[len - 1] != 'b')
-			exit_close_error("Wrong map format\n", 1, fd);
+			|| name[len - 3] != ext[0]
+			|| name[len - 2] != ext[1]
+			|| name[len - 1] != ext[2])
+			exit_close_error("File extension is invalid\n", 1, fd);
 	}
 }
 
+//Inits the `t_data` structure
 void	init_data(char *map_name, t_data *data)
 {
 	int		fd;
 	char	*line;
 
 	fd = safe_open(map_name, O_RDONLY);
-	check_format(map_name, fd);
+	check_ext(map_name, "cub", fd);
 	line = get_next_line(fd);
 	if (line == NULL)
 		exit_close_error("Could not read file\n", 1, fd);
-	init_infos(data, line, fd);
+	line = parse_config(data, line, fd);
 	init_map(data, line, fd, map_name);
 	data->player.vertical_angle = 0.5;
 	data->keys.keys_pressed_count = 0;
@@ -56,6 +57,7 @@ static int	exit_program()
 	exit(0);
 }
 
+//Sets up hooks and launches the main loop
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data)
 {
 	mlx_hook(win_ptr, KeyPress, KeyPressMask, key_press_hook, &data->keys);

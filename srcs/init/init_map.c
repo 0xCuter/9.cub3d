@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:44:31 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 18:39:26 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/27 10:43:11 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
+//Gets the dimensions of the map from the config file
 static void	get_map_dimensions(char *line, t_map *map, int fd)
 {
 	size_t	max_len;
@@ -33,6 +34,26 @@ static void	get_map_dimensions(char *line, t_map *map, int fd)
 	}
 	map->width = max_len;
 	map->height = i;
+}
+
+//Reads the config file until the first line of the map
+static char	*go_to_map(int fd)
+{
+	char	*line;
+	int		i;
+
+	line = get_next_line(fd);
+	i = 0;
+	while(line)
+	{
+		while (ft_strchr(SPACES, line[i]))
+			i++;
+		if (ft_strchr("01", line[i]))
+			return (line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (NULL);
 }
 
 //Inits player if it finds it in the map
@@ -67,15 +88,13 @@ static char	find_player(t_data *data, char *line, int i)
 }
 
 //Inits a `t_map` structure
-static void	fill_map(t_data *data, int fd)
+static void	fill_map(char *line, t_data *data, int fd)
 {
 	char	player_found;
-	char	*line;
 	size_t	len;
 	size_t	i;
 
 	player_found = 0;
-	line = get_next_line(fd);
 	i = 0;
 	while (line)
 	{
@@ -99,6 +118,7 @@ static void	fill_map(t_data *data, int fd)
 		exit_close_error("Could not find a player's start position\n", 1, fd);
 }
 
+//Checks that the map respects all the rules
 static void	check_map(t_data *data)
 {
 	char	*map;
@@ -126,6 +146,7 @@ static void	check_map(t_data *data)
 	}
 }
 
+//Initializes the map data structure
 void	init_map(t_data *data, char *line, int fd, char *map_name)
 {
 	get_map_dimensions(line, &data->map, fd);
@@ -134,7 +155,8 @@ void	init_map(t_data *data, char *line, int fd, char *map_name)
 	if (&data->map.map == NULL)
 		exit_error("Malloc error\n", 1);
 	fd = safe_open(map_name, O_RDONLY);
-	fill_map(data, fd);
+	line = go_to_map(fd);
+	fill_map(line, data, fd);
 	check_map(data);
 	safe_close(fd);
 }

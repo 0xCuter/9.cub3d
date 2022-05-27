@@ -3,108 +3,105 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/26 18:20:07 by vvandenb          #+#    #+#             */
-/*   Updated: 2021/12/15 11:03:28 by vvandenb         ###   ########.fr       */
+/*   Created: 2021/05/15 14:52:19 by scuter            #+#    #+#             */
+/*   Updated: 2021/08/24 18:59:15 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// Returns a string's length
-// (Returns -1 if given a NULL pointer)
-unsigned int	ft_strlen_modified(const char *s)
+static char	*clean_stack(char *stack)
 {
-	int	c;
+	char	*str;
+	int		i;
+	int		j;
 
-	if (s == NULL)
-		return (-1);
-	c = 0;
-	while (*s++)
-		++c;
-	return (c);
-}
-
-// Allocates and sets memory to 0
-static void	*ft_calloc(int count, int size)
-{
-	void	*array;
-	char	*p;
-	int		size_total;
-
-	size_total = count * size;
-	array = malloc(size_total);
-	if (array == NULL)
+	i = 0;
+	j = 0;
+	if (!stack)
 		return (NULL);
-	p = (char *) array;
-	while (size_total)
+	while (stack[i] && stack[i] != '\n')
+		i++;
+	if (!stack[i])
 	{
-		*p = 0;
-		++p;
-		--size_total;
+		free(stack);
+		return (NULL);
 	}
-	return (array);
+	str = malloc(sizeof(char) * (ft_strlen(stack) - i + 1));
+	if (!str)
+		return (NULL);
+	i++;
+	while (stack[i])
+		str[j++] = stack[i++];
+	str[j] = '\0';
+	free(stack);
+	return (str);
 }
 
-// Returns the index of the first occurence of a newline, or the string's
-// length if a newline is not found
-// (Returns -1 if given a NULL pointer)
-static unsigned int	ft_str_nl(const char *s)
+static char	*get_line(char *stack)
 {
-	unsigned int	c;
+	char	*str;
+	int		i;
 
-	if (s == NULL)
-		return (-1);
-	c = 0;
-	while (s[c])
+	i = 0;
+	if (!stack || stack[0] == 0)
+		return (NULL);
+	while (stack[i] && stack[i] != '\n')
+		i++;
+	str = malloc(sizeof(char) * (i + 2));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (stack[i] && stack[i] != '\n')
 	{
-		if (s[c] == '\n')
-			return (c);
-		++c;
+		str[i] = stack[i];
+		i++;
 	}
-	return (c);
+	if (stack[i] == '\n')
+	{
+		str[i] = stack[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
-// Reads from "fd" and appends to "lines" until a newline is read
-// or until "read" reaches the end of "fd"
-// Returns the last "read" value
-static int	read_next_line(char **lines, int fd, int r)
+char	*ret_line(char **stack)
 {
-	char		*line_read;
+	char			*line;
 
-	while (r > 0 && ft_str_nl(*lines) == ft_strlen_modified(*lines))
-	{
-		line_read = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-		if (line_read == NULL)
-			return (-1);
-		r = read(fd, line_read, BUFFER_SIZE);
-		*lines = ft_strjoin_modified(*lines, line_read);
-		free(line_read);
-		if (*lines == NULL)
-			return (-1);
-	}
-	return (r);
+	line = get_line(*stack);
+	*stack = clean_stack(*stack);
+	if (line)
+		return (line);
+	return (NULL);
 }
 
-// Main function
 char	*get_next_line(int fd)
 {
-	static char	*lines = NULL;
-	int			r;
-	char		*line;
+	static char		*stack;
+	char			*buff;
+	int				ret;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	ret = 1;
+	if ((fd < 0 || fd > 255) || BUFFER_SIZE < 1)
 		return (NULL);
-	r = read_next_line(&lines, fd, BUFFER_SIZE);
-	if (r < 0 || lines == NULL || lines[0] == 0)
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buff)
+		return (NULL);
+	while (!has_newline(stack) && ret != 0)
 	{
-		free(lines);
-		lines = NULL;
-		return (NULL);
+		ret = read(fd, buff, BUFFER_SIZE);
+		if (ret == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[ret] = '\0';
+		stack = str_join(stack, buff);
 	}
-	line = get_line(lines);
-	lines = ft_substr_modified(lines, ft_str_nl(lines) + 1,
-			ft_strlen_modified(lines));
-	return (line);
+	free(buff);
+	return (ret_line(&stack));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/25 16:30:17 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/27 10:31:27 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include "mlx.h"
 # include <X11/X.h>
 
+# define SPACES " \t\n\v\f\r"
+
 # define SCREEN_WIDTH			800
 # define SCREEN_HEIGHT			500
 # define GAME_WIDTH				600
@@ -34,12 +36,12 @@
 # define RAD1					0.0174532925f
 
 //COLORS
-# define CEILING_R				113
-# define CEILING_G				205
-# define CEILING_B				241
-# define FLOOR_R				72
-# define FLOOR_G				111
-# define FLOOR_B				56
+// # define CEILING_R				113
+// # define CEILING_G				205
+// # define CEILING_B				241
+// # define FLOOR_R				72
+// # define FLOOR_G				111
+// # define FLOOR_B				56
 
 //SETTINGS
 # define S_FOV					60
@@ -78,9 +80,14 @@ typedef struct s_map {
 	size_t	width;
 }	t_map;
 
+typedef struct s_config {
+	char	*texture[4];
+	int		color[2];
+}	t_config;
+
 //Structure representing the player
 typedef struct s_player {
-	t_fpoint	pos; 
+	t_fpoint	pos;
 	t_fpoint	orientation;
 	double		angle;
 	float		vertical_angle;
@@ -102,6 +109,7 @@ typedef struct s_keys {
 //Structure holding the program's data
 typedef struct s_data {
 	t_map		map;
+	t_config	config;
 	t_player	player;
 	t_mlx_data	mlx_data;
 	t_keys		keys;
@@ -127,12 +135,24 @@ int		key_release_hook(int keycode, t_keys *keys);
 //	init.c
 //Inits the `t_data` structure
 void	init_data(char *map_name, t_data *data);
+//Exits if the file does not have the correct extension
+void	check_ext(char *name, char *ext, int fd);
 //Sets up hooks and launches the main loop
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
+
 //	init_map.c
+//Initializes the map data structure
 void	init_map(t_data *data, char *line, int fd, char *map_name);
-//	init_infos.c
-void	init_infos(t_data *data, char *line, int fd);
+
+//	init_config.c
+//Parses the config data structure
+char	*parse_config(t_data *data, char *line, int fd);
+
+//	parsing.c
+//Parses the texture file path in the config data structure
+void	parse_texture(char *line, int id, int fd, t_data *data);
+//Parses the RGB color value in the config data structure
+void	parse_color(char *line, int id, int fd, t_data *data);
 
 //utils_exit.c
 //Prints error with `perror(s)` and exits `exit(i)`
@@ -149,6 +169,10 @@ void	fix_angle(double *angle);
 int		safe_open(char *file_name, int flags);
 //Same as `close()`, but exits on error
 void	safe_close(int fd);
+//Checks if a string is all spaces
+int		str_isspace(char *str);
+//Frees a two-dimensional array
+void	free_tab(char **tab);
 
 //player.c
 void	control_player(t_data *data, t_keys *keys);

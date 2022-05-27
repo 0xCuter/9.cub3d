@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:59:55 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/25 16:39:17 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/27 01:44:34 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static void	draw_map(t_mlx_data *mlx, t_map *map, t_player *player)
 void	draw(t_data *data)
 {
 	draw_map(&data->mlx_data, &data->map, &data->player);
-	img_square_put(&data->mlx_data.img, argb(0, CEILING_R, CEILING_G, CEILING_B),
+	img_square_put(&data->mlx_data.img, data->config.color[1],
 		(t_point){0, 0}, (t_point){GAME_WIDTH, SCREEN_HEIGHT * data->player.vertical_angle});
-	img_square_put(&data->mlx_data.img, argb(0, FLOOR_R, FLOOR_G, FLOOR_B),
+	img_square_put(&data->mlx_data.img, data->config.color[0],
 		(t_point){0, SCREEN_HEIGHT * data->player.vertical_angle}, (t_point){GAME_WIDTH, SCREEN_HEIGHT - (SCREEN_HEIGHT * data->player.vertical_angle)});
 	draw_rays(&data->mlx_data, &data->map, &data->player);
 
