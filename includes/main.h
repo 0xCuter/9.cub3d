@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/27 10:31:27 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/29 15:34:50 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,6 @@
 # define PLAYER_ROTATE_SPEED	0.05f
 # define MAX_KEYS_PRESSED		5
 # define RAD1					0.0174532925f
-
-//COLORS
-// # define CEILING_R				113
-// # define CEILING_G				205
-// # define CEILING_B				241
-// # define FLOOR_R				72
-// # define FLOOR_G				111
-// # define FLOOR_B				56
 
 //SETTINGS
 # define S_FOV					60
@@ -73,6 +65,12 @@ typedef struct s_img {
 	int		endian;
 }	t_img;
 
+//Structure representing a texture
+typedef struct s_texture {
+	t_img	img;
+	t_point	size;
+}	t_texture;
+
 //Structure representing the map
 typedef struct s_map {
 	char	*map;
@@ -81,8 +79,8 @@ typedef struct s_map {
 }	t_map;
 
 typedef struct s_config {
-	char	*texture[4];
-	int		color[2];
+	t_texture	textures[4];
+	int			color[2];
 }	t_config;
 
 //Structure representing the player

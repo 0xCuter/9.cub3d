@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:55:51 by scuter            #+#    #+#             */
-/*   Updated: 2022/05/27 10:35:40 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/29 15:40:29 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,19 @@
 //Parses the texture file path in the config data structure
 void	parse_texture(char *line, int id, int fd, t_data *data)
 {
-	char	*str;
+	char		*str;
+	t_texture	*texture;
+
+	texture = &data->config.textures[id];
 	if (str_isspace(line))
 		exit_close_error("Texture path is empty\n", 1, fd);
 	str = ft_strtrim(line, SPACES);
 	check_ext(str, "xpm", fd);
-	data->config.texture[id] = ft_strdup(str);
+	texture->img.img = mlx_xpm_file_to_image(data->mlx_data.mlx_ptr, str, &texture->size.x, &texture->size.y);
 	free(str);
+	if (texture->img.img == NULL)
+		exit_close_error("Texture could not be loaded\n", 1, fd);
+	texture->img.addr = mlx_get_data_addr(texture->img.img, &texture->img.bits_per_pixel, &texture->img.line_len, &texture->img.endian);
 }
 
 //Checks if the RGB value is in the right format

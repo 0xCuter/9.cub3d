@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_config.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 18:17:13 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/27 10:43:25 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/29 15:40:01 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 //Initializes the empty config data structure
 static void	init_config(t_config *config)
 {
-	config->texture[0] = NULL;
-	config->texture[1] = NULL;
-	config->texture[2] = NULL;
-	config->texture[3] = NULL;
+	config->textures[0].img.img = NULL;
+	config->textures[1].img.img = NULL;
+	config->textures[2].img.img = NULL;
+	config->textures[3].img.img = NULL;
 	config->color[0] = 0;
 	config->color[1] = 0;
 }
@@ -26,10 +26,10 @@ static void	init_config(t_config *config)
 //Checks if all the elements in the config file have been parsed before parsing the map
 static char	check_if_ready(t_config *config, int fd)
 {
-	if (config->texture[0] == NULL ||
-		config->texture[1] == NULL ||
-		config->texture[2] == NULL ||
-		config->texture[3] == NULL ||
+	if (config->textures[0].img.img == NULL ||
+		config->textures[1].img.img == NULL ||
+		config->textures[2].img.img == NULL ||
+		config->textures[3].img.img == NULL ||
 		config->color[0] == 0 ||
 		config->color[1] == 0)
 		exit_close_error("Incomplete config file\n", 1, fd);
@@ -68,7 +68,6 @@ static char	parse_line(char *line, int fd, t_data *data)
 char	*parse_config(t_data *data, char *line, int fd)
 {
 	init_config(&data->config);
-
 	while (line)
 	{
 		if (parse_line(line, fd, data))
