@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/11 14:08:44 by vvandenb          #+#    #+#              #
-#    Updated: 2022/05/29 15:00:37 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/05/29 15:01:48 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ HEADERS = $(HEADERS_DIR)main.h $(HEADERS_DIR)get_next_line.h $(HEADERS_DIR)keyma
 NAME = cub3D
 SRCS = $(SRCS_DIR)main.c $(SRCS_DIR)player.c $(SRCS_DIR)draw.c $(SRCS_DIR)raycast.c	\
 		$(SRCS_DIR)utils.c $(SRCS_DIR)utils_exit.c	\
-		$(SRCS_DIR)init/init.c $(SRCS_DIR)init/init_infos.c $(SRCS_DIR)init/init_map.c	\
+		$(SRCS_DIR)init/init.c $(SRCS_DIR)init/init_config.c $(SRCS_DIR)init/init_map.c $(SRCS_DIR)init/parsing.c	\
 		$(SRCS_DIR)mlx/mlx_utils.c $(SRCS_DIR)mlx/hooks.c	\
 		$(SRCS_DIR)gnl/get_next_line.c $(SRCS_DIR)gnl/get_next_line_utils.c	\
 		$(SRCS_DIR)debug/map.c $(SRCS_DIR)debug/bresenham.c

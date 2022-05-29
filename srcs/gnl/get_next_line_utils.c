@@ -3,129 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/26 18:20:05 by vvandenb          #+#    #+#             */
-/*   Updated: 2021/12/13 12:01:34 by vvandenb         ###   ########.fr       */
+/*   Created: 2021/05/15 14:52:59 by scuter            #+#    #+#             */
+/*   Updated: 2021/08/24 14:11:23 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// Returns the next line as a new string
-// (Returns a NULL pointer if lines is a NULL pointer)
-char	*get_line(char *lines)
+size_t	ft_strlen(const char *str)
 {
-	char	*line;
-	int		line_len;
+	size_t	i;
 
-	if (lines == NULL)
-		return (NULL);
-	line_len = 0;
-	while (lines[line_len] && lines[line_len] != '\n')
-		++line_len;
-	if (lines[line_len] == '\n')
-		line = malloc((++line_len + 1) * sizeof(char));
-	else
-		line = malloc((line_len + 1) * sizeof(char));
-	if (line == NULL)
-		return (NULL);
-	line[line_len] = 0;
-	while (line_len-- > 0)
-		line[line_len] = lines[line_len];
-	return (line);
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
 }
 
-// ft_strjoin auxilary function
-// Copies the value of the strings "src" to "dest"
-// Returns a pointer to the "dest"'s last copied char
-static char	*copy_str(char *src, char *dest)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	while (*src)
+	char	*d;
+	char	*s;
+
+	d = (char *)dst;
+	s = (char *)src;
+	if (dst == src)
+		return (dst);
+	if (s < d)
 	{
-		*dest = *src;
-		++src;
-		++dest;
+		while (len--)
+			*(d + len) = *(s + len);
+		return (dst);
 	}
-	return (dest);
+	while (len--)
+		*d++ = *s++;
+	return (dst);
 }
 
-// Returns a new string resulting from the concatenation of "lines"
-// to "line_read", and then frees "lines"
-// (Returns "lines" if "line_read" is a NULL pointer)
-char	*ft_strjoin_modified(char *lines, char *line_read)
+char	*str_join(char const *s1, char const *s2)
 {
-	char	*lines_p;
-	char	*line_read_p;
-	char	*p;
-	char	*rp;
-	int		p_len;
+	size_t	len1;
+	size_t	len2;
+	char	*join;
 
-	if (line_read == NULL)
-		return ((char *) lines);
-	p_len = 1;
-	lines_p = (char *) lines;
-	while (lines_p && *lines_p++)
-		++p_len;
-	line_read_p = (char *) line_read;
-	while (*line_read_p++)
-		++p_len;
-	p = malloc(p_len * sizeof(char));
-	if (p == NULL)
+	if (!s1 && !s2)
 		return (NULL);
-	rp = p;
-	if (lines)
-		p = copy_str((char *) lines, p);
-	p = copy_str((char *) line_read, p);
-	*p = 0;
-	free(lines);
-	return (rp);
+	len1 = ft_strlen((char *)s1);
+	len2 = ft_strlen((char *)s2);
+	join = malloc(sizeof(char) * len1 + len2 + 1);
+	if (!join)
+		return (NULL);
+	ft_memmove(join, s1, len1);
+	ft_memmove(join + len1, s2, len2);
+	join[len1 + len2] = '\0';
+	free((char *)s1);
+	return (join);
 }
 
-// ft_substr auxilary function
-static char	*ft_substr2(char *lines, char *rs, unsigned int start, int len)
+int	has_newline(char *str)
 {
-	int	c;
+	int	i;
 
-	c = 0;
-	while (c != len && lines[start + c])
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
 	{
-		rs[c] = lines[start + c];
-		++c;
+		if (str[i] == '\n')
+			return (1);
+		i++;
 	}
-	rs[c] = 0;
-	free(lines);
-	return (rs);
-}
-
-// Returns a new string copied from "lines" from "start" with a length of
-// "len", and frees "lines"
-// (Returns a NULL pointer if "lines" is a NULL pointer)
-// (Returns an empty string if "start" is greater than "lines"'s length)
-char	*ft_substr_modified(char *lines, unsigned int start, unsigned int len)
-{
-	char			*rs;
-	unsigned int	s_len;
-
-	s_len = ft_strlen_modified(lines);
-	if (lines == NULL)
-		return (NULL);
-	if (len > s_len)
-		len = s_len;
-	if (start > s_len)
-	{
-		rs = malloc(sizeof(char));
-		*rs = 0;
-		free(lines);
-		return (rs);
-	}
-	if (start + len > s_len)
-		len = s_len - start;
-	rs = malloc((len + 1) * sizeof(char));
-	if (rs == NULL)
-	{
-		free(lines);
-		return (NULL);
-	}
-	return (ft_substr2(lines, rs, start, len));
+	return (0);
 }
