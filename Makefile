@@ -6,7 +6,7 @@
 #    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/11 14:08:44 by vvandenb          #+#    #+#              #
-#    Updated: 2022/05/25 16:41:42 by vvandenb         ###   ########.fr        #
+#    Updated: 2022/05/29 15:00:37 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror	\
 		-I $(HEADERS_DIR) -I $(LIBFT_DIR) -I $(LIBX_DIR)	\
 		-I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Tk.framework/Versions/8.5/Headers/
 ifdef DEBUG
-	CFLAGS += -g -pg
+	CFLAGS += -g
 endif
 ifdef PROFILER
 	CFLAGS += -pg

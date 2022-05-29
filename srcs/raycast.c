@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/25 16:31:32 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/25 16:46:53 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ static t_fpoint	check_horizontal(t_map *map, t_player *player, float angle)
 		ray.y += offset.y;
 		++dof;
 	}
-	// if (dof < MAX_RAY_LOOPS)
-		return (ray);
-	// return (t_fpoint){-1, -1};
+	return (ray);
 }
 
 static t_fpoint	check_vertical(t_map *map, t_player *player, float angle)
@@ -98,9 +96,7 @@ static t_fpoint	check_vertical(t_map *map, t_player *player, float angle)
 		ray.y += offset.y;
 		++dof;
 	}
-	// if (dof < MAX_RAY_LOOPS)
-		return (ray);
-	// return (t_fpoint){-1, -1};
+	return (ray);
 }
 
 static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i, float angle)
