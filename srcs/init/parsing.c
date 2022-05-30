@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:55:51 by scuter            #+#    #+#             */
-/*   Updated: 2022/05/29 15:40:29 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/30 15:39:33 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	parse_color(char *line, int id, int fd, t_data *data)
 	color[0] = ft_atoi(split[0]);
 	color[1] = ft_atoi(split[1]);
 	color[2] = ft_atoi(split[2]);
-	free(split);
+	free_tab(split);
 	if ((color[0] < 0 || color[0] > 255) ||
 		(color[1] < 0 || color[1] > 255) ||
 		(color[2] < 0 || color[2] > 255))
