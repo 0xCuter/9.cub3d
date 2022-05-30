@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 14:59:55 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/29 15:41:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:21:53 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,6 @@ void	draw(t_data *data)
 		(t_point){0, 0}, (t_point){GAME_WIDTH, SCREEN_HEIGHT * data->player.vertical_angle});
 	img_square_put(&data->mlx_data.img, data->config.color[0],
 		(t_point){0, SCREEN_HEIGHT * data->player.vertical_angle}, (t_point){GAME_WIDTH, SCREEN_HEIGHT - (SCREEN_HEIGHT * data->player.vertical_angle)});
-	draw_rays(&data->mlx_data, &data->map, &data->player);
-
-	// t_point	pos = {0, 0};
-	// int	zoom = 2;
-	// while (pos.y / zoom < data->config.textures[0].size.y)
-	// {
-	// 	pos.x = 0;
-	// 	while (pos.x / zoom < data->config.textures[0].size.x)
-	// 	{
-	// 		img_square_put(&data->mlx_data.img, ((int *)data->config.textures[0].img.addr)[pos.x / zoom + pos.y / zoom * data->config.textures[0].size.y],
-	// 			pos, (t_point){zoom, zoom});
-	// 		pos.x += zoom;
-	// 	}
-	// 	pos.y += zoom;
-	// }
-
-	mlx_put_image_to_window(data->mlx_data.mlx_ptr, data->mlx_data.win_ptr, data->mlx_data.img.img, 0, 0);
-	mlx_put_image_to_window(data->mlx_data.mlx_ptr, data->mlx_data.win_ptr, data->config.textures[0].img.img, 0, 0);
+	draw_rays(data, &data->map, &data->player);
+	mlx_put_image_to_window(data->mlx_data.mlx_ptr, data->mlx_data.win_ptr, data->mlx_data.img.img, 0, 0);	
 }

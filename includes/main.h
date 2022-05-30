@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/29 15:34:50 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:40:22 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,25 @@
 # define GAME_WIDTH				600
 # define TILE_SIZE				15
 # define PLAYER_SIZE			2
-# define PLAYER_SPEED			0.1f
+# define PLAYER_SPEED			0.01f
 # define PLAYER_VERTICAL_SPEED	0.05f
 # define PLAYER_ROTATE_SPEED	0.05f
 # define MAX_KEYS_PRESSED		5
-# define RAD1					0.0174532925f
+// # define RAD1					0.0174532925f
+# define RAD1					0.00436332313f
 
 //SETTINGS
-# define S_FOV					60
+# define S_FOV					240
 # define S_VIEW_DISTANCE		8
 
 enum e_tiles {
 	T_WALL = '1',
 	T_EMPTY = '0'
+};
+
+enum e_ray_type {
+	VERTICAL,
+	HORIZONTAL
 };
 
 //Structure representing a point with ints
@@ -176,7 +182,7 @@ void	free_tab(char **tab);
 void	control_player(t_data *data, t_keys *keys);
 
 //raycast.c
-void	draw_rays(t_mlx_data *mlx, t_map *map, t_player *player);
+void	draw_rays(t_data *data, t_map *map, t_player *player);
 
 //draw.c
 void	draw(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/24 16:39:40 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:13:17 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main_loop(t_data *data)
 {
 	//REMOVE!
-	usleep(10000);
+	usleep(5000);
 
 	if (data->keys.keys_pressed_count)
 	{
