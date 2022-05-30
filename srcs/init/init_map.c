@@ -6,7 +6,7 @@
 /*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:44:31 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/27 10:43:11 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/30 15:16:28 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	get_map_dimensions(char *line, t_map *map, int fd)
 	while (line)
 	{
 		len = ft_strlen(line);
+		if (len < 2)
+		{
+			free(line);
+			break ;
+		}
 		if (line[len - 1] == '\n')
 			len--;
 		if (len > max_len)
@@ -46,10 +51,13 @@ static char	*go_to_map(int fd)
 	i = 0;
 	while(line)
 	{
-		while (ft_strchr(SPACES, line[i]))
-			i++;
-		if (ft_strchr("01", line[i]))
-			return (line);
+		if (!str_isspace(line))
+		{
+			while (ft_strchr(SPACES, line[i]))
+				i++;
+			if (ft_strchr("01", line[i]))
+				return (line);
+		}
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -100,6 +108,11 @@ static void	fill_map(char *line, t_data *data, int fd)
 	{
 		player_found += find_player(data, line, i);
 		len = ft_strlen(line);
+		if (len < 2)
+		{
+			free(line);
+			break ;
+		}
 		if (line[len - 1] == '\n')
 			len--;
 		ft_memcpy(data->map.map + i, line, len);
