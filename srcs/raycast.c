@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 09:52:05 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:02:09 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,45 @@
 
 static float	distance(t_fpoint *p1, t_fpoint *p2)
 {
-	return (sqrt((p1->y - p2->y) * (p1->y - p2->y) + (p1->x - p2->x) * (p1->x - p2->x)));
+	return (sqrt((p1->y - p2->y) * (p1->y - p2->y)
+			+ (p1->x - p2->x) * (p1->x - p2->x)));
 }
 
-static t_fpoint	check_horizontal(t_map *map, t_player *player, float angle)
+static t_fpoint	setup_check(t_fpoint *offset, t_fpoint p_pos, char b, float a)
+{
+	t_fpoint	ray;
+
+	ray.y = (int)p_pos.y;
+	if (b)
+		offset->y = -1;
+	else
+		offset->y = 1;
+	if (offset->y == 1)
+		ray.y += 1;
+	ray.x = (p_pos.y - ray.y) * a + p_pos.x;
+	offset->x = -offset->y * a;
+	return (ray);
+}
+
+static t_fpoint	check_horizontal(t_map *map, t_fpoint *p_pos, float angle)
 {
 	t_fpoint	ray;
 	t_fpoint	offset;
-	int 		tile;
+	int			tile;
 
-	if ((angle >= M_PI - 0.001 && angle <= M_PI + 0.001)
-		|| (angle >= -0.001 && angle <= 0.001))
-		return (t_fpoint){-1, -1};
-	if (angle < M_PI)
-	{
-		ray.y = (int)player->pos.y;
-		ray.x = (player->pos.y - ray.y) * (1 / tan(angle)) + player->pos.x;
-		offset.y = -1;
-	}
-	else if (angle > M_PI)
-	{
-		ray.y = (int)player->pos.y + 1;
-		ray.x = (player->pos.y - ray.y) * (1 / tan(angle)) + player->pos.x;
-		offset.y = 1;
-	}
-	offset.x = -offset.y * (1 / tan(angle));
-	while (distance(&player->pos, &ray) <= S_VIEW_DISTANCE)
+	if (angle == M_PI || angle == 0)
+		return ((t_fpoint){-1, -1});
+	ray = setup_check(&offset, *p_pos, angle < M_PI, 1 / tan(angle));
+	while (distance(p_pos, &ray) <= S_VIEW_DISTANCE)
 	{
 		if (ray.x < 0 || ray.y < 0 || (offset.y == -1 && ray.y - 1 < 0))
-			return (t_fpoint){-1, -1};
+			return ((t_fpoint){-1, -1});
 		if (offset.y == -1)
 			tile = (int)ray.x + (int)(ray.y - 1) * map->width;
 		else
 			tile = (int)ray.x + (int)ray.y * map->width;
-		if (tile >= 0 && tile < (int)(map->width * map->height) && map->map[tile] == T_WALL)
+		if (tile >= 0 && tile < (int)(map->width * map->height)
+			&& map->map[tile] == T_WALL)
 			break ;
 		ray.x += offset.x;
 		ray.y += offset.y;
@@ -55,37 +60,28 @@ static t_fpoint	check_horizontal(t_map *map, t_player *player, float angle)
 	return (ray);
 }
 
-static t_fpoint	check_vertical(t_map *map, t_player *player, float angle)
+static t_fpoint	check_vertical(t_map *map, t_fpoint p_pos, float angle)
 {
 	t_fpoint	ray;
 	t_fpoint	offset;
-	int 		tile;
+	int			tile;
 
-	if ((angle >= M_PI / 2 - 0.001 && angle <= M_PI / 2 + 0.001)
-		|| (angle >= M_PI * 3 / 2 - 0.001 && angle <= M_PI * 3 / 2 + 0.001))
-		return (t_fpoint){-1, -1};
-	if (angle > M_PI / 2 && angle < M_PI * 3 / 2)
-	{
-		ray.x = (int)player->pos.x;
-		ray.y = (player->pos.x - ray.x) * tan(angle) + player->pos.y;
-		offset.x = -1;
-	}
-	else if (angle < M_PI / 2 || angle > M_PI * 3 / 2)
-	{
-		ray.x = (int)player->pos.x + 1;
-		ray.y = (player->pos.x - ray.x) * tan(angle) + player->pos.y;
-		offset.x = 1;
-	}
-	offset.y = -offset.x * tan(angle);
-	while (distance(&player->pos, &ray) <= S_VIEW_DISTANCE)
+	if (angle == M_PI * 3 / 2 || angle == M_PI / 2)
+		return ((t_fpoint){-1, -1});
+	ray = setup_check(&offset, (t_fpoint){p_pos.y, p_pos.x},
+			(angle > M_PI / 2 && angle < M_PI * 3 / 2), tan(angle));
+	offset = (t_fpoint){offset.y, offset.x};
+	ray = (t_fpoint){ray.y, ray.x};
+	while (distance(&p_pos, &ray) <= S_VIEW_DISTANCE)
 	{
 		if (ray.x < 0 || ray.y < 0 || (offset.x == -1 && ray.x - 1 < 0))
-			return (t_fpoint){-1, -1};
+			return ((t_fpoint){-1, -1});
 		if (offset.x == -1)
 			tile = (int)ray.x - 1 + (int)ray.y * map->width;
 		else
 			tile = (int)ray.x + (int)ray.y * map->width;
-		if (tile >= 0 && tile < (int)(map->width * map->height) && map->map[tile] == T_WALL)
+		if (tile >= 0 && tile < (int)(map->width * map->height)
+			&& map->map[tile] == T_WALL)
 			break ;
 		ray.x += offset.x;
 		ray.y += offset.y;
@@ -152,18 +148,15 @@ static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i,
 			if (s->shade && ray_type == VERTICAL)
 				color = (color >> 1) & 8355711;
 
-			if (wall_width < 1)
-				img_square_put(img, color, (t_point){x, y}, (t_point){1, 1});
-			else
-				img_square_put(img, color, (t_point){x, y}, (t_point){wall_width + 1, 1});
+			img_square_put(img, color, (t_point){x, y}, (t_point){wall_width + 1, 1});
 			tex_y += text_step_y;
 			++y;
 		}
 	}
 	else
-		img_square_put(img, argb(0, 0, 0, 0), (t_point){i * (GAME_WIDTH / s->ray_amount),
+		img_square_put(img, argb(0, 0, 0, 0), (t_point){i * ((float)GAME_WIDTH / s->ray_amount),
 			(SCREEN_HEIGHT - (SCREEN_HEIGHT / S_VIEW_DISTANCE)) * player->vertical_angle},
-			(t_point){(GAME_WIDTH / s->ray_amount), SCREEN_HEIGHT / S_VIEW_DISTANCE});
+			(t_point){((float)GAME_WIDTH / s->ray_amount) + 1, SCREEN_HEIGHT / S_VIEW_DISTANCE});
 }
 
 void	draw_rays(t_data *data, t_map *map, t_player *player)
@@ -181,8 +174,8 @@ void	draw_rays(t_data *data, t_map *map, t_player *player)
 	fix_angle(&angle);
 	while (i < data->settings.ray_amount)
 	{
-		ray_horizontal = check_horizontal(map, player, angle);
-		ray_vertical = check_vertical(map, player, angle);
+		ray_horizontal = check_horizontal(map, &player->pos, angle);
+		ray_vertical = check_vertical(map, player->pos, angle);
 		if (ray_horizontal.x == -1 && ray_horizontal.y == -1)
 		{
 			ray_type = VERTICAL;

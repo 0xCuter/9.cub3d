@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:17:42 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/26 21:31:17 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/31 11:05:27 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	safe_close(int fd)
 		exit_perror("CLOSE", fd);
 }
 
-int		str_isspace(char *str)
+int	str_isspace(char *str)
 {
 	size_t	i;
 

@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/30 13:13:17 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:05:57 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	main(int argc, char **argv)
 		data.mlx_data.mlx_ptr = mlx_init();
 		if (data.mlx_data.mlx_ptr == NULL)
 			exit(-1);
-		data.mlx_data.win_ptr = mlx_new_window(data.mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d");
+		data.mlx_data.win_ptr = mlx_new_window(data.mlx_data.mlx_ptr,
+				SCREEN_WIDTH, SCREEN_HEIGHT, "cub3D");
 		if (data.mlx_data.win_ptr == NULL)
 			exit(-1);
 		init_data(argv[1], &data);

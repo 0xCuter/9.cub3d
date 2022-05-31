@@ -1,14 +1,11 @@
-F 72,111,56
-
+NO ./textures/wall3.xpm
 SO ./textures/wall1.xpm
-EA ./textures/wall1.xpm
-
-
-NO ./textures/wall2.xpm
+WE ./textures/debug.xpm
+EA ./textures/wall2.xpm
 
 C 72,205,241
+F 72,111,56
 
-WE ./textures/wall1.xpm
    1
   101
  10N01

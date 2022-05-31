@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 18:17:13 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/29 15:40:01 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:06:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ static void	init_config(t_config *config)
 	config->color[1] = 0;
 }
 
-//Checks if all the elements in the config file have been parsed before parsing the map
+//Checks if all elements in config file have been parsed before parsing the map
 static char	check_if_ready(t_config *config, int fd)
 {
-	if (config->textures[0].img.img == NULL ||
-		config->textures[1].img.img == NULL ||
-		config->textures[2].img.img == NULL ||
-		config->textures[3].img.img == NULL ||
-		config->color[0] == 0 ||
-		config->color[1] == 0)
+	if (config->textures[0].img.img == NULL
+		|| config->textures[1].img.img == NULL
+		|| config->textures[2].img.img == NULL
+		|| config->textures[3].img.img == NULL
+		|| config->color[0] == 0
+		|| config->color[1] == 0)
 		exit_close_error("Incomplete config file\n", 1, fd);
 	return (1);
 }

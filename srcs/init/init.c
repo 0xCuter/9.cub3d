@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 09:48:40 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:02:47 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	init_data(char *map_name, t_data *data)
 }
 
 //Called when pressing window close
-static int	exit_program()
+static int	exit_program(void)
 {
 	exit(0);
 }
@@ -70,9 +70,12 @@ static int	exit_program()
 //Sets up hooks and launches the main loop
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data)
 {
-	mlx_hook(win_ptr, KeyPress, KeyPressMask, key_press_hook, &data->keys);
-	mlx_hook(win_ptr, KeyRelease, KeyReleaseMask, key_release_hook, &data->keys);
-	mlx_hook(win_ptr, DestroyNotify, 0, exit_program, NULL);
+	mlx_hook(win_ptr, KeyPress, KeyPressMask,
+		key_press_hook, &data->keys);
+	mlx_hook(win_ptr, KeyRelease, KeyReleaseMask,
+		key_release_hook, &data->keys);
+	mlx_hook(win_ptr, DestroyNotify, 0,
+		exit_program, NULL);
 	mlx_loop_hook(mlx_ptr, main_loop, data);
 	mlx_loop(mlx_ptr);
 }
