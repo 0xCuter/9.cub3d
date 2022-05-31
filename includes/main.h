@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/30 16:40:22 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 09:51:02 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,25 @@
 # include "mlx.h"
 # include <X11/X.h>
 
+//CONSTANTS
 # define SPACES " \t\n\v\f\r"
-
-# define SCREEN_WIDTH			800
-# define SCREEN_HEIGHT			500
-# define GAME_WIDTH				600
-# define TILE_SIZE				15
-# define PLAYER_SIZE			2
-# define PLAYER_SPEED			0.01f
-# define PLAYER_VERTICAL_SPEED	0.05f
-# define PLAYER_ROTATE_SPEED	0.05f
-# define MAX_KEYS_PRESSED		5
-// # define RAD1					0.0174532925f
-# define RAD1					0.00436332313f
-
-//SETTINGS
-# define S_FOV					240
-# define S_VIEW_DISTANCE		8
+# define SCREEN_WIDTH				800
+# define SCREEN_HEIGHT				500
+# define GAME_WIDTH					600
+# define MAX_KEYS_PRESSED			5
+# define RAD1						0.0174532925f
+//GAME SETTINGS
+# define PLAYER_SPEED				0.01f
+# define PLAYER_VERTICAL_SPEED		0.05f
+# define PLAYER_ROTATE_SPEED		0.05f
+//ENGINE SETTINGS
+# define S_FOV						60
+# define S_SHADE					0
+# define S_VIEW_DISTANCE			8
+# define S_RAYS_AMOUNT_MULTIPLIER	4
+//MINIMAP SETTINGS
+# define TILE_SIZE					15
+# define PLAYER_SIZE				2
 
 enum e_tiles {
 	T_WALL = '1',
@@ -110,9 +112,19 @@ typedef struct s_keys {
 	size_t	keys_pressed_count;
 }	t_keys;
 
+//Structure holding the game's settings
+typedef struct s_settings {
+	char	shade;
+	size_t	view_distance;
+	size_t	fov;
+	size_t	ray_amount;
+	float	angle_increment;
+}	t_settings;
+
 //Structure holding the program's data
 typedef struct s_data {
 	t_map		map;
+	t_settings	settings;
 	t_config	config;
 	t_player	player;
 	t_mlx_data	mlx_data;

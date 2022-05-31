@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/30 17:14:00 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 09:52:05 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,11 @@ static t_fpoint	check_horizontal(t_map *map, t_player *player, float angle)
 {
 	t_fpoint	ray;
 	t_fpoint	offset;
-	size_t		dof;
 	int 		tile;
 
 	if ((angle >= M_PI - 0.001 && angle <= M_PI + 0.001)
 		|| (angle >= -0.001 && angle <= 0.001))
 		return (t_fpoint){-1, -1};
-	dof = 0;
 	if (angle < M_PI)
 	{
 		ray.y = (int)player->pos.y;
@@ -53,7 +51,6 @@ static t_fpoint	check_horizontal(t_map *map, t_player *player, float angle)
 			break ;
 		ray.x += offset.x;
 		ray.y += offset.y;
-		++dof;
 	}
 	return (ray);
 }
@@ -62,13 +59,11 @@ static t_fpoint	check_vertical(t_map *map, t_player *player, float angle)
 {
 	t_fpoint	ray;
 	t_fpoint	offset;
-	size_t		dof;
 	int 		tile;
 
 	if ((angle >= M_PI / 2 - 0.001 && angle <= M_PI / 2 + 0.001)
 		|| (angle >= M_PI * 3 / 2 - 0.001 && angle <= M_PI * 3 / 2 + 0.001))
 		return (t_fpoint){-1, -1};
-	dof = 0;
 	if (angle > M_PI / 2 && angle < M_PI * 3 / 2)
 	{
 		ray.x = (int)player->pos.x;
@@ -94,13 +89,12 @@ static t_fpoint	check_vertical(t_map *map, t_player *player, float angle)
 			break ;
 		ray.x += offset.x;
 		ray.y += offset.y;
-		++dof;
 	}
 	return (ray);
 }
 
 static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i,
-	float angle, float dif_angle, t_texture *texture, char ray_type)
+	float angle, float dif_angle, t_texture *texture, char ray_type, t_settings *s)
 {
 	float	dist;
 	int		color;
@@ -131,7 +125,7 @@ static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i,
 		wall_offset -= floor((wall_offset));
 
 		int		y = (SCREEN_HEIGHT - wall_height) * player->vertical_angle;
-		float 	wall_width = ((float)GAME_WIDTH / S_FOV);
+		float 	wall_width = ((float)GAME_WIDTH / s->ray_amount);
 		int		draw_height = y + wall_height;
 		float	tex_y = text_step_y * tex_y_offset;
 		int		x = i * wall_width;
@@ -155,7 +149,7 @@ static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i,
 				else
 					color = ((int *)texture->img.addr)[(int)tex_x + texture->size.y * (int)tex_y];
 			}
-			if(ray_type == VERTICAL)
+			if (s->shade && ray_type == VERTICAL)
 				color = (color >> 1) & 8355711;
 
 			if (wall_width < 1)
@@ -167,9 +161,9 @@ static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i,
 		}
 	}
 	else
-		img_square_put(img, argb(0, 0, 0, 0), (t_point){i * (GAME_WIDTH / S_FOV),
+		img_square_put(img, argb(0, 0, 0, 0), (t_point){i * (GAME_WIDTH / s->ray_amount),
 			(SCREEN_HEIGHT - (SCREEN_HEIGHT / S_VIEW_DISTANCE)) * player->vertical_angle},
-			(t_point){(GAME_WIDTH / S_FOV), SCREEN_HEIGHT / S_VIEW_DISTANCE});
+			(t_point){(GAME_WIDTH / s->ray_amount), SCREEN_HEIGHT / S_VIEW_DISTANCE});
 }
 
 void	draw_rays(t_data *data, t_map *map, t_player *player)
@@ -183,9 +177,9 @@ void	draw_rays(t_data *data, t_map *map, t_player *player)
 	t_texture	*texture;
 
 	i = 0;
-	angle = player->angle + (RAD1 * (S_FOV / 2));
+	angle = player->angle + (data->settings.angle_increment * (data->settings.ray_amount / 2));
 	fix_angle(&angle);
-	while (i < S_FOV)
+	while (i < data->settings.ray_amount)
 	{
 		ray_horizontal = check_horizontal(map, player, angle);
 		ray_vertical = check_vertical(map, player, angle);
@@ -217,9 +211,9 @@ void	draw_rays(t_data *data, t_map *map, t_player *player)
 			texture = &data->config.textures[2];
 		else
 			texture = &data->config.textures[3];
-		draw_ray(&data->mlx_data.img, player, &ray, i, angle, player->angle - angle, texture, ray_type);
+		draw_ray(&data->mlx_data.img, player, &ray, i, angle, player->angle - angle, texture, ray_type, &data->settings);
 		++i;
-		angle -= RAD1;
+		angle -= data->settings.angle_increment;
 		fix_angle(&angle);
 	}
 }

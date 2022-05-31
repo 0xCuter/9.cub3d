@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/27 02:40:42 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/31 09:48:40 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+static void	init_settings(t_settings *s)
+{
+	s->shade = S_SHADE;
+	s->view_distance = S_VIEW_DISTANCE;
+	s->fov = S_FOV;
+	s->ray_amount = S_FOV * S_RAYS_AMOUNT_MULTIPLIER;
+	s->angle_increment = RAD1 / S_RAYS_AMOUNT_MULTIPLIER;
+}
 
 //Exits if the file does not have the correct extension
 void	check_ext(char *name, char *ext, int fd)
@@ -35,6 +44,7 @@ void	init_data(char *map_name, t_data *data)
 	int		fd;
 	char	*line;
 
+	init_settings(&data->settings);
 	fd = safe_open(map_name, O_RDONLY);
 	check_ext(map_name, "cub", fd);
 	line = get_next_line(fd);
