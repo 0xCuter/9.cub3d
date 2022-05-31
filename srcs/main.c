@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:18 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 15:14:24 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:44:06 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int argc, char **argv)
 	}
 	else if (argv && argv[0])
 	{
-		printf("Usage: %s <map.cub3D>\n", argv[0]);
+		printf("Error\nUsage: %s <map.cub3D>\n", argv[0]);
 		exit(1);
 	}
 	return (0);
