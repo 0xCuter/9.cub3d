@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 11:22:16 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 11:58:06 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 14:33:57 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,27 @@ typedef struct s_texture {
 }	t_texture;
 
 //utils_exit.c
-//Prints error with `perror(s)` and exits `exit(i)`
+//	Prints error with `perror(s)` and exits `exit(i)`
 void	exit_perror(char *s, int i);
-//Prints error on `STDERR` and exits `exit(i)`
+//	Prints error on `STDERR` and exits `exit(i)`
 void	exit_error(char *s, int i);
-//Same as `exit_error()` but also closes `fd`
+//	Same as `exit_error()` but also closes `fd`
 void	exit_close_error(char *s, int i, int fd);
 
-//utils.c
-//"Fixes" an angle greater than 2PI or less than 0
+//utils_math.c
+//	Returns the distance between two points
+float	distance(t_fpoint *p1, t_fpoint *p2);
+//	"Fixes" an angle greater than 2PI or less than 0
 void	fix_angle(float *angle);
-//Same as `open()`, but exits on error
+
+//utils.c
+//	Same as `open()`, but exits on error
 int		safe_open(char *file_name, int flags);
-//Same as `close()`, but exits on error
+//	Same as `close()`, but exits on error
 void	safe_close(int fd);
-//Checks if a string is all spaces
+//	Checks if a string is all spaces
 int		str_isspace(char *str);
-//Frees a two-dimensional array
+//	Frees a two-dimensional array
 void	free_tab(char **tab);
 
 #endif

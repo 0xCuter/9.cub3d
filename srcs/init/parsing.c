@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 19:55:51 by scuter            #+#    #+#             */
-/*   Updated: 2022/05/30 15:39:33 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/31 15:19:31 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ void	parse_texture(char *line, int id, int fd, t_data *data)
 		exit_close_error("Texture path is empty\n", 1, fd);
 	str = ft_strtrim(line, SPACES);
 	check_ext(str, "xpm", fd);
-	texture->img.img = mlx_xpm_file_to_image(data->mlx_data.mlx_ptr, str, &texture->size.x, &texture->size.y);
+	texture->img.img = mlx_xpm_file_to_image(data->mlx_data.mlx_ptr, str,
+			&texture->size.x, &texture->size.y);
 	free(str);
 	if (texture->img.img == NULL)
 		exit_close_error("Texture could not be loaded\n", 1, fd);
-	texture->img.addr = mlx_get_data_addr(texture->img.img, &texture->img.bits_per_pixel, &texture->img.line_len, &texture->img.endian);
+	texture->img.addr = mlx_get_data_addr(texture->img.img,
+			&texture->img.bits_per_pixel, &texture->img.line_len,
+			&texture->img.endian);
 }
 
 //Checks if the RGB value is in the right format
@@ -72,10 +75,10 @@ void	parse_color(char *line, int id, int fd, t_data *data)
 	color[1] = ft_atoi(split[1]);
 	color[2] = ft_atoi(split[2]);
 	free_tab(split);
-	if ((color[0] < 0 || color[0] > 255) ||
-		(color[1] < 0 || color[1] > 255) ||
-		(color[2] < 0 || color[2] > 255))
+	if ((color[0] < 0 || color[0] > 255)
+		|| (color[1] < 0 || color[1] > 255)
+		|| (color[2] < 0 || color[2] > 255))
 		exit_close_error("RGB value is out of range\n", 1, fd);
 	data->config.color[id] = argb(0, (unsigned char)color[0],
-	(unsigned char)color[1], (unsigned char)color[2]);
+			(unsigned char)color[1], (unsigned char)color[2]);
 }

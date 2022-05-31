@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 12:52:50 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:14:18 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include "libft.h"
-# include "get_next_line.h"
+# include "gnl.h"
 # include "utils.h"
 # include "settings.h"
 # include "keymap.h"
@@ -28,7 +28,7 @@
 # define SPACES " \t\n\v\f\r"
 # define SCREEN_WIDTH				800
 # define SCREEN_HEIGHT				500
-# define GAME_WIDTH					600
+# define GAME_WIDTH					SCREEN_WIDTH
 # define MAX_KEYS_PRESSED			5
 # define RAD1						0.0174532925f
 
@@ -129,6 +129,22 @@ int		key_press_hook(int keycode, t_keys *keys);
 //Register key releases
 int		key_release_hook(int keycode, t_keys *keys);
 
+//draw/
+//	rays.c
+//Casts rays
+void	draw_rays(t_data *data, t_map *map, t_player *player);
+//	raycast.c
+t_ray	check_horizontal(t_map *map, t_fpoint *p_pos, float angle);
+t_ray	check_vertical(t_map *map, t_fpoint p_pos, float angle);
+//	ray_draw.c
+//Renders a ray that hit a wall
+void	draw_wall(t_data *data, int i, t_ray *ray, t_ray_s *ray_s);
+//Renders a ray that didn't hit a wall
+void	draw_fog(int i, t_data *data, float *vertical_angle);
+//	draw.c
+//Main render function
+void	draw(t_data *data);
+
 //init/
 //	init.c
 //Inits the `t_data` structure
@@ -137,15 +153,12 @@ void	init_data(char *map_name, t_data *data);
 void	check_ext(char *name, char *ext, int fd);
 //Sets up hooks and launches the main loop
 void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
-
 //	init_map.c
 //Initializes the map data structure
 void	init_map(t_data *data, char *line, int fd, char *map_name);
-
 //	init_config.c
 //Parses the config data structure
 char	*parse_config(t_data *data, char *line, int fd);
-
 //	parsing.c
 //Parses the texture file path in the config data structure
 void	parse_texture(char *line, int id, int fd, t_data *data);
@@ -155,16 +168,7 @@ void	parse_color(char *line, int id, int fd, t_data *data);
 //player.c
 void	control_player(t_data *data, t_keys *keys);
 
-//raycast.c
-void	draw_rays(t_data *data, t_map *map, t_player *player);
-
-//draw.c
-void	draw(t_data *data);
-
 //main.c
 int		main_loop(t_data *data);
-
-//REMOVE!
-# include "debug.h"
 
 #endif

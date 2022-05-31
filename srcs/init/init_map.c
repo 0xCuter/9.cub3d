@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:44:31 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/30 15:16:28 by scuter           ###   ########.fr       */
+/*   Updated: 2022/05/31 15:20:15 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*go_to_map(int fd)
 
 	line = get_next_line(fd);
 	i = 0;
-	while(line)
+	while (line)
 	{
 		if (!str_isspace(line))
 		{
@@ -165,7 +165,7 @@ void	init_map(t_data *data, char *line, int fd, char *map_name)
 	get_map_dimensions(line, &data->map, fd);
 	safe_close(fd);
 	data->map.map = malloc((data->map.height * data->map.width) * sizeof(char));
-	if (&data->map.map == NULL)
+	if (data->map.map == NULL)
 		exit_error("Malloc error\n", 1);
 	fd = safe_open(map_name, O_RDONLY);
 	line = go_to_map(fd);

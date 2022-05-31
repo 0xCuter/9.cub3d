@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:59:09 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 11:58:58 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:33:32 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,27 @@ static void	move(t_player *player, t_map *map, double angle)
 		player->pos.y = prev_pos.y;
 }
 
+// static void	move_vertical_angle(float *vertical_angle, float move)
+// {
+// 	*vertical_angle += move;
+// 	if (*vertical_angle > 0.95)
+// 		*vertical_angle = 0.95;
+// 	if (*vertical_angle < 0.05)
+// 		*vertical_angle = 0.05;
+// }
+
 void	control_player(t_data *data, t_keys *keys)
 {
 	if (key_pressed(KEY_A, keys) && !key_pressed(KEY_D, keys))
 		move(&data->player, &data->map, data->player.angle + M_PI / 2);
 	if (key_pressed(KEY_D, keys) && !key_pressed(KEY_A, keys))
 		move(&data->player, &data->map, data->player.angle - M_PI / 2);
-	if (key_pressed(KEY_UP, keys) && !key_pressed(KEY_DOWN, keys)
-		&& data->player.vertical_angle + PLAYER_VERTICAL_SPEED <= 1)
-		data->player.vertical_angle += PLAYER_VERTICAL_SPEED;
-	if (key_pressed(KEY_DOWN, keys) && !key_pressed(KEY_UP, keys)
-		&& data->player.vertical_angle - PLAYER_VERTICAL_SPEED >= 0)
-		data->player.vertical_angle -= PLAYER_VERTICAL_SPEED;
+	// if (key_pressed(KEY_UP, keys) && !key_pressed(KEY_DOWN, keys))
+	// 	move_vertical_angle(&data->player.vertical_angle,
+	// 		PLAYER_VERTICAL_SPEED);
+	// if (key_pressed(KEY_DOWN, keys) && !key_pressed(KEY_UP, keys))
+	// 	move_vertical_angle(&data->player.vertical_angle,
+	// 		-PLAYER_VERTICAL_SPEED);
 	if (key_pressed(KEY_W, keys) && !key_pressed(KEY_S, keys))
 		move(&data->player, &data->map, data->player.angle);
 	if (key_pressed(KEY_S, keys) && !key_pressed(KEY_W, keys))

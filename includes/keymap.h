@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:37:40 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/22 15:43:48 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 15:05:07 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 //Unix (azerty)
 # ifdef __unix__
 #  define KEY_ESCAPE	65307
+#  define KEY_TAB		65289
 #  define KEY_W			122
 #  define KEY_A			113
 #  define KEY_S			115
@@ -30,6 +31,7 @@
 //Mac (qwerty)
 # ifdef __APPLE__
 #  define KEY_ESCAPE	53
+#  define KEY_TAB		48
 #  define KEY_W			13
 #  define KEY_A			0
 #  define KEY_S			1
