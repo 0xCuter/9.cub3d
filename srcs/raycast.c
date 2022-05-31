@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 11:02:09 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:55:29 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,19 @@ static t_fpoint	setup_check(t_fpoint *offset, t_fpoint p_pos, char b, float a)
 	return (ray);
 }
 
-static t_fpoint	check_horizontal(t_map *map, t_fpoint *p_pos, float angle)
+static t_ray	check_horizontal(t_map *map, t_fpoint *p_pos, float angle)
 {
 	t_fpoint	ray;
 	t_fpoint	offset;
 	int			tile;
 
 	if (angle == M_PI || angle == 0)
-		return ((t_fpoint){-1, -1});
+		return ((t_ray){0, (t_fpoint){0, 0}, angle, HORIZONTAL, NULL, 0});
 	ray = setup_check(&offset, *p_pos, angle < M_PI, 1 / tan(angle));
 	while (distance(p_pos, &ray) <= S_VIEW_DISTANCE)
 	{
 		if (ray.x < 0 || ray.y < 0 || (offset.y == -1 && ray.y - 1 < 0))
-			return ((t_fpoint){-1, -1});
+			return ((t_ray){0, (t_fpoint){0, 0}, angle, HORIZONTAL, NULL, 0});
 		if (offset.y == -1)
 			tile = (int)ray.x + (int)(ray.y - 1) * map->width;
 		else
@@ -57,17 +57,17 @@ static t_fpoint	check_horizontal(t_map *map, t_fpoint *p_pos, float angle)
 		ray.x += offset.x;
 		ray.y += offset.y;
 	}
-	return (ray);
+	return ((t_ray){1, (t_fpoint){ray.x, ray.y}, angle, HORIZONTAL, NULL, 0});
 }
 
-static t_fpoint	check_vertical(t_map *map, t_fpoint p_pos, float angle)
+static t_ray	check_vertical(t_map *map, t_fpoint p_pos, float angle)
 {
 	t_fpoint	ray;
 	t_fpoint	offset;
 	int			tile;
 
 	if (angle == M_PI * 3 / 2 || angle == M_PI / 2)
-		return ((t_fpoint){-1, -1});
+		return ((t_ray){0, (t_fpoint){0, 0}, angle, VERTICAL, NULL, 0});
 	ray = setup_check(&offset, (t_fpoint){p_pos.y, p_pos.x},
 			(angle > M_PI / 2 && angle < M_PI * 3 / 2), tan(angle));
 	offset = (t_fpoint){offset.y, offset.x};
@@ -75,7 +75,7 @@ static t_fpoint	check_vertical(t_map *map, t_fpoint p_pos, float angle)
 	while (distance(&p_pos, &ray) <= S_VIEW_DISTANCE)
 	{
 		if (ray.x < 0 || ray.y < 0 || (offset.x == -1 && ray.x - 1 < 0))
-			return ((t_fpoint){-1, -1});
+			return ((t_ray){0, (t_fpoint){0, 0}, angle, VERTICAL, NULL, 0});
 		if (offset.x == -1)
 			tile = (int)ray.x - 1 + (int)ray.y * map->width;
 		else
@@ -86,127 +86,130 @@ static t_fpoint	check_vertical(t_map *map, t_fpoint p_pos, float angle)
 		ray.x += offset.x;
 		ray.y += offset.y;
 	}
-	return (ray);
+	return ((t_ray){1, (t_fpoint){ray.x, ray.y}, angle, VERTICAL, NULL, 0});
 }
 
-static void	draw_ray(t_img *img, t_player *player, t_fpoint *ray, size_t i,
-	float angle, float dif_angle, t_texture *texture, char ray_type, t_settings *s)
+static int	find_color(t_ray *ray, t_fpoint *t_pos, char *b_shade, t_texture *t)
 {
-	float	dist;
-	int		color;
-	int		wall_height;
+	int	color;
 
-	dist = distance(&player->pos, ray);
-	if (dist <= S_VIEW_DISTANCE && (ray->x != -1 && ray->y != -1))
+	if (ray->orientation == HORIZONTAL)
 	{
-		color = argb(0, 200.0f * (1 - dist / S_VIEW_DISTANCE), 65.0f * (1 - dist / S_VIEW_DISTANCE), 47.0f * (1 - dist / S_VIEW_DISTANCE));
-		wall_height = SCREEN_HEIGHT / (dist * cos(dif_angle));
-		float	text_step_y = (float)texture->size.y / wall_height;
-		float	tex_y_offset = 0;
-		if (wall_height < 0 || wall_height > SCREEN_HEIGHT)
-		{
-			tex_y_offset = (wall_height - SCREEN_HEIGHT) / 2;
-			wall_height = SCREEN_HEIGHT;
-		}
-		draw_line(img, color,
-			(t_point){player->pos.x * TILE_SIZE + GAME_WIDTH,
-			player->pos.y * TILE_SIZE},
-			(t_point){ray->x * TILE_SIZE + GAME_WIDTH, ray->y * TILE_SIZE});
-
-		float wall_offset;
-		if (ray_type == HORIZONTAL)
-			wall_offset = ray->x;
+		if (ray->angle > M_PI)
+			color = ((int *)t->img.addr)
+			[(int)(t->size.x - t_pos->x) + t->size.y * (int)t_pos->y];
 		else
-			wall_offset = ray->y;
-		wall_offset -= floor((wall_offset));
-
-		int		y = (SCREEN_HEIGHT - wall_height) * player->vertical_angle;
-		float 	wall_width = ((float)GAME_WIDTH / s->ray_amount);
-		int		draw_height = y + wall_height;
-		float	tex_y = text_step_y * tex_y_offset;
-		int		x = i * wall_width;
-		while (y < draw_height)
-		{
-			int		color;
-			float	tex_x;
-
-			tex_x = wall_offset * texture->size.x;
-			if (ray_type == HORIZONTAL)
-			{
-				if (angle > M_PI)
-					color = ((int *)texture->img.addr)[(int)(texture->size.x - tex_x) + texture->size.y * (int)tex_y];
-				else
-					color = ((int *)texture->img.addr)[(int)tex_x + texture->size.y * (int)tex_y];
-			}
-			else
-			{
-				if (angle > M_PI / 2 && angle < 3 * M_PI / 2)
-					color = ((int *)texture->img.addr)[(int)(texture->size.x - tex_x) + texture->size.y * (int)tex_y];
-				else
-					color = ((int *)texture->img.addr)[(int)tex_x + texture->size.y * (int)tex_y];
-			}
-			if (s->shade && ray_type == VERTICAL)
-				color = (color >> 1) & 8355711;
-
-			img_square_put(img, color, (t_point){x, y}, (t_point){wall_width + 1, 1});
-			tex_y += text_step_y;
-			++y;
-		}
+			color = ((int *)t->img.addr)
+			[(int)t_pos->x + t->size.y * (int)t_pos->y];
 	}
 	else
-		img_square_put(img, argb(0, 0, 0, 0), (t_point){i * ((float)GAME_WIDTH / s->ray_amount),
-			(SCREEN_HEIGHT - (SCREEN_HEIGHT / S_VIEW_DISTANCE)) * player->vertical_angle},
-			(t_point){((float)GAME_WIDTH / s->ray_amount) + 1, SCREEN_HEIGHT / S_VIEW_DISTANCE});
+	{
+		if (ray->angle > M_PI / 2 && ray->angle < 3 * M_PI / 2)
+			color = ((int *)t->img.addr)
+			[(int)(t->size.x - t_pos->x) + t->size.y * (int)t_pos->y];
+		else
+			color = ((int *)t->img.addr)
+			[(int)t_pos->x + t->size.y * (int)t_pos->y];
+	}
+	if (*b_shade && ray->orientation == VERTICAL)
+		color = (color >> 1) & 8355711;
+	return (color);
+}
+
+static void	paint_wall(t_data *data, int i, t_ray *ray, t_ray_s *ray_s)
+{
+	int	y;
+	int	draw_height;
+
+	y = (SCREEN_HEIGHT - ray_s->wall_height) * data->player.vertical_angle;
+	draw_height = y + ray_s->wall_height;
+	while (y < draw_height)
+	{
+		img_square_put(&data->mlx_data.img,
+			find_color(ray, &ray_s->t_pos, &data->s.shade, ray->texture),
+			(t_point){((float)GAME_WIDTH / data->s.ray_amount) * i, y},
+			(t_point){((float)GAME_WIDTH / data->s.ray_amount) + 1, 1});
+		ray_s->t_pos.y += ray_s->text_step_y;
+		++y;
+	}
+}
+
+static void	draw_fog(int i, t_data *data, float *vertical_angle)
+{
+	img_square_put(&data->mlx_data.img, argb(0, 0, 0, 0),
+		(t_point){i * ((float)GAME_WIDTH / data->s.ray_amount),
+		(SCREEN_HEIGHT - (SCREEN_HEIGHT / S_VIEW_DISTANCE)) * *vertical_angle},
+		(t_point){((float)GAME_WIDTH / data->s.ray_amount) + 1,
+		SCREEN_HEIGHT / S_VIEW_DISTANCE});
+}
+
+static void	draw_ray(t_data *data, t_ray *ray, size_t i)
+{
+	float		wall_offset;
+	t_ray_s		ray_s;
+
+	if (ray->hit_wall && ray->dist_to_player <= S_VIEW_DISTANCE)
+	{
+		ray_s.wall_height = SCREEN_HEIGHT
+			/ (ray->dist_to_player * cos(data->player.angle - ray->angle));
+		ray_s.text_step_y = (float)ray->texture->size.y / ray_s.wall_height;
+		ray_s.t_pos.y = 0;
+		if (ray_s.wall_height < 0 || ray_s.wall_height > SCREEN_HEIGHT)
+		{
+			ray_s.t_pos.y = ray_s.text_step_y
+				* ((ray_s.wall_height - SCREEN_HEIGHT) / 2);
+			ray_s.wall_height = SCREEN_HEIGHT;
+		}
+		if (ray->orientation == HORIZONTAL)
+			wall_offset = ray->hit.x;
+		else
+			wall_offset = ray->hit.y;
+		wall_offset -= floor((wall_offset));
+		ray_s.t_pos.x = wall_offset * ray->texture->size.x;
+		paint_wall(data, i, ray, &ray_s);
+	}
+	else
+		draw_fog(i, data, &data->player.vertical_angle);
 }
 
 void	draw_rays(t_data *data, t_map *map, t_player *player)
 {
-	t_fpoint	ray_horizontal;
-	t_fpoint	ray_vertical;
-	t_fpoint	ray;
-	double		angle;
+	t_ray		ray_horizontal;
+	t_ray		ray_vertical;
+	t_ray		ray;
 	size_t		i;
-	char		ray_type;
-	t_texture	*texture;
 
 	i = 0;
-	angle = player->angle + (data->settings.angle_increment * (data->settings.ray_amount / 2));
-	fix_angle(&angle);
-	while (i < data->settings.ray_amount)
+	ray.angle = player->angle
+		+ (data->s.angle_increment * (data->s.ray_amount / 2));
+	fix_angle(&ray.angle);
+	while (i < data->s.ray_amount)
 	{
-		ray_horizontal = check_horizontal(map, &player->pos, angle);
-		ray_vertical = check_vertical(map, player->pos, angle);
-		if (ray_horizontal.x == -1 && ray_horizontal.y == -1)
-		{
-			ray_type = VERTICAL;
+		ray_horizontal = check_horizontal(map, &player->pos, ray.angle);
+		ray_vertical = check_vertical(map, player->pos, ray.angle);
+		if (!ray_horizontal.hit_wall)
 			ray = ray_vertical;
-		}
-		else if (ray_vertical.x == -1 && ray_vertical.y == -1)
-		{
-			ray_type = HORIZONTAL;
+		else if (!ray_vertical.hit_wall)
 			ray = ray_horizontal;
-		}
-		else if (distance(&player->pos, &ray_horizontal) < distance(&player->pos, &ray_vertical))
-		{
-			ray_type = HORIZONTAL;
+		else if (distance(&player->pos, &ray_horizontal.hit)
+			< distance(&player->pos, &ray_vertical.hit))
 			ray = ray_horizontal;
-		}
 		else
-		{
-			ray_type = VERTICAL;
 			ray = ray_vertical;
-		}
-		if (ray_type == HORIZONTAL && angle > M_PI)
-			texture = &data->config.textures[1];
-		else if (ray_type == HORIZONTAL)
-			texture = &data->config.textures[0];
-		else if (ray_type == VERTICAL && (angle > M_PI / 2 && angle < 3 * M_PI / 2))
-			texture = &data->config.textures[2];
+		if (ray.orientation == HORIZONTAL && ray.angle > M_PI)
+			ray.texture = &data->config.textures[1];
+		else if (ray.orientation == HORIZONTAL)
+			ray.texture = &data->config.textures[0];
+		else if (ray.orientation == VERTICAL
+			&& (ray.angle > M_PI / 2 && ray.angle < 3 * M_PI / 2))
+			ray.texture = &data->config.textures[2];
 		else
-			texture = &data->config.textures[3];
-		draw_ray(&data->mlx_data.img, player, &ray, i, angle, player->angle - angle, texture, ray_type, &data->settings);
+			ray.texture = &data->config.textures[3];
+		if (ray.hit_wall)
+			ray.dist_to_player = distance(&data->player.pos, &ray.hit);
+		draw_ray(data, &ray, i);
 		++i;
-		angle -= data->settings.angle_increment;
-		fix_angle(&angle);
+		ray.angle -= data->s.angle_increment;
+		fix_angle(&ray.angle);
 	}
 }

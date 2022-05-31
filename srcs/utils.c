@@ -6,13 +6,13 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:17:42 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 11:05:27 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 11:57:49 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	fix_angle(double *angle)
+void	fix_angle(float *angle)
 {
 	if (*angle < 0)
 		*angle += 2 * M_PI;

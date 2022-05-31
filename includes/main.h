@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 09:51:02 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:52:50 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <math.h>
 # include "libft.h"
 # include "get_next_line.h"
+# include "utils.h"
+# include "settings.h"
 # include "keymap.h"
 # include "mlx.h"
 # include <X11/X.h>
@@ -29,55 +31,33 @@
 # define GAME_WIDTH					600
 # define MAX_KEYS_PRESSED			5
 # define RAD1						0.0174532925f
-//GAME SETTINGS
-# define PLAYER_SPEED				0.01f
-# define PLAYER_VERTICAL_SPEED		0.05f
-# define PLAYER_ROTATE_SPEED		0.05f
-//ENGINE SETTINGS
-# define S_FOV						60
-# define S_SHADE					0
-# define S_VIEW_DISTANCE			8
-# define S_RAYS_AMOUNT_MULTIPLIER	4
-//MINIMAP SETTINGS
-# define TILE_SIZE					15
-# define PLAYER_SIZE				2
 
 enum e_tiles {
 	T_WALL = '1',
 	T_EMPTY = '0'
 };
 
-enum e_ray_type {
+enum e_ray_orientation {
 	VERTICAL,
 	HORIZONTAL
 };
 
-//Structure representing a point with ints
-typedef struct s_point {
-	int	x;
-	int	y;
-}	t_point;
+//Structure representing a cast ray
+typedef struct s_ray_settings {
+	float		text_step_y;
+	int			wall_height;
+	t_fpoint	t_pos;
+}	t_ray_s;
 
-//Structure representing a point with floats
-typedef struct s_fpoint {
-	float	x;
-	float	y;
-}	t_fpoint;
-
-//Structure representing an mlx image
-typedef struct s_img {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_len;
-	int		endian;
-}	t_img;
-
-//Structure representing a texture
-typedef struct s_texture {
-	t_img	img;
-	t_point	size;
-}	t_texture;
+//Structure representing a cast ray
+typedef struct s_ray {
+	char		hit_wall;
+	t_fpoint	hit;
+	float		angle;
+	char		orientation;
+	t_texture	*texture;
+	float		dist_to_player;
+}	t_ray;
 
 //Structure representing the map
 typedef struct s_map {
@@ -86,6 +66,7 @@ typedef struct s_map {
 	size_t	width;
 }	t_map;
 
+//Structure holding the map's config data
 typedef struct s_config {
 	t_texture	textures[4];
 	int			color[2];
@@ -95,7 +76,7 @@ typedef struct s_config {
 typedef struct s_player {
 	t_fpoint	pos;
 	t_fpoint	orientation;
-	double		angle;
+	float		angle;
 	float		vertical_angle;
 }	t_player;
 
@@ -124,7 +105,7 @@ typedef struct s_settings {
 //Structure holding the program's data
 typedef struct s_data {
 	t_map		map;
-	t_settings	settings;
+	t_settings	s;
 	t_config	config;
 	t_player	player;
 	t_mlx_data	mlx_data;
@@ -138,7 +119,8 @@ void	img_pixel_put(t_img *img, int color, t_point pos);
 //Draws a square on an mlx img
 void	img_square_put(t_img *img, int color, t_point pos, t_point size);
 //Returns an int representing a color
-int		argb(unsigned char a, unsigned char r, unsigned char g, unsigned char b);
+int		argb(unsigned char a, unsigned char r,
+			unsigned char g, unsigned char b);
 //	hooks.c
 //Returns 1 if `keycode` is pressed
 char	key_pressed(int keycode, t_keys *keys);
@@ -169,26 +151,6 @@ char	*parse_config(t_data *data, char *line, int fd);
 void	parse_texture(char *line, int id, int fd, t_data *data);
 //Parses the RGB color value in the config data structure
 void	parse_color(char *line, int id, int fd, t_data *data);
-
-//utils_exit.c
-//Prints error with `perror(s)` and exits `exit(i)`
-void	exit_perror(char *s, int i);
-//Prints error on `STDERR` and exits `exit(i)`
-void	exit_error(char *s, int i);
-//Same as `exit_error()` but also closes `fd`
-void	exit_close_error(char *s, int i, int fd);
-
-//utils.c
-//"Fixes" an angle greater than 2PI or less than 0
-void	fix_angle(double *angle);
-//Same as `open()`, but exits on error
-int		safe_open(char *file_name, int flags);
-//Same as `close()`, but exits on error
-void	safe_close(int fd);
-//Checks if a string is all spaces
-int		str_isspace(char *str);
-//Frees a two-dimensional array
-void	free_tab(char **tab);
 
 //player.c
 void	control_player(t_data *data, t_keys *keys);

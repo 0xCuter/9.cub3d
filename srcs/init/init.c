@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 11:02:47 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:07:54 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	init_data(char *map_name, t_data *data)
 	int		fd;
 	char	*line;
 
-	init_settings(&data->settings);
+	init_settings(&data->s);
 	fd = safe_open(map_name, O_RDONLY);
 	check_ext(map_name, "cub", fd);
 	line = get_next_line(fd);
