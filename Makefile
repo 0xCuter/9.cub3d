@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: scuter <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/11 14:08:44 by vvandenb          #+#    #+#              #
-#    Updated: 2022/06/01 02:03:27 by scuter           ###   ########.fr        #
+#    Updated: 2022/06/01 09:17:14 by vvandenb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 LIBFT_FLAGS = -lft -L$(LIBFT_DIR)
 
 #MACOS minilibx
-LIBX_DIR = minilibx_macos/
+LIBX_DIR = minilibx_opengl_20191021/
 LIBX = $(LIBX_DIR)libmlx.a
 LIBX_FLAGS = -l mlx -L $(LIBX_DIR) -framework OpenGL -framework AppKit
 
@@ -65,7 +65,7 @@ $(LIBFT): FORCE
 	@make bonus -C $(LIBFT_DIR)
 
 $(LIBX): FORCE
-	@make -C $(LIBX_DIR)
+	@make -C $(LIBX_DIR) 2>/dev/null
 
 $(NAME): $(LIBFT) $(LIBX) $(OBJS)
 	@echo Compiling...
@@ -74,7 +74,7 @@ $(NAME): $(LIBFT) $(LIBX) $(OBJS)
 
 clean:
 	@make clean -C $(LIBFT_DIR)
-	@make clean -C $(LIBX_DIR)
+	@make clean -C $(LIBX_DIR) -s
 	@rm -f $(OBJS)
 	@echo Cleaned!
 

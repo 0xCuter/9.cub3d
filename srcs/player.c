@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 11:59:09 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 15:33:32 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 09:05:24 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,16 @@ static void	move(t_player *player, t_map *map, double angle)
 	orientation.y = -sin(angle);
 	prev_pos = player->pos;
 	player->pos.x += orientation.x * PLAYER_SPEED;
-	if (map->map[(int)player->pos.x + (int)player->pos.y * map->width]
-		== T_WALL)
+	if (map->map[(int)(player->pos.x - PLAYER_HITBOX)
+		+ (int)player->pos.y * map->width] == T_WALL
+			|| map->map[(int)(player->pos.x + PLAYER_HITBOX)
+			+ (int)player->pos.y * map->width] == T_WALL)
 		player->pos.x = prev_pos.x;
 	player->pos.y += orientation.y * PLAYER_SPEED;
-	if (map->map[(int)player->pos.x + (int)player->pos.y * map->width]
-		== T_WALL)
+	if (map->map[(int)player->pos.x
+			+ (int)(player->pos.y - PLAYER_HITBOX) * map->width] == T_WALL
+			|| map->map[(int)player->pos.x
+			+ (int)(player->pos.y + PLAYER_HITBOX) * map->width] == T_WALL)
 		player->pos.y = prev_pos.y;
 }
 
