@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:44:31 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 15:20:15 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 02:07:30 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-
-//Gets the dimensions of the map from the config file
-static void	get_map_dimensions(char *line, t_map *map, int fd)
-{
-	size_t	max_len;
-	size_t	len;
-	size_t	i;
-
-	max_len = 0;
-	i = 0;
-	while (line)
-	{
-		len = ft_strlen(line);
-		if (len < 2)
-		{
-			free(line);
-			break ;
-		}
-		if (line[len - 1] == '\n')
-			len--;
-		if (len > max_len)
-			max_len = len;
-		free(line);
-		line = get_next_line(fd);
-		i++;
-	}
-	map->width = max_len;
-	map->height = i;
-}
 
 //Reads the config file until the first line of the map
 static char	*go_to_map(int fd)
@@ -64,34 +35,25 @@ static char	*go_to_map(int fd)
 	return (NULL);
 }
 
-//Inits player if it finds it in the map
-static char	find_player(t_data *data, char *line, int i)
+static char	fill_str(char *line, t_data *data, size_t i)
 {
-	char	*player;
+	size_t	len;
 
-	player = ft_strchr(line, 'N');
-	if (player == NULL)
-		player = ft_strchr(line, 'S');
-	if (player == NULL)
-		player = ft_strchr(line, 'W');
-	if (player == NULL)
-		player = ft_strchr(line, 'E');
-	if (player)
+	len = ft_strlen(line);
+	if (len < 2)
 	{
-		if (*player == 'E')
-			data->player.angle = 0;
-		if (*player == 'N')
-			data->player.angle = M_PI / 2;
-		if (*player == 'W')
-			data->player.angle = M_PI;
-		if (*player == 'S')
-			data->player.angle = M_PI * 3 / 2;
-		data->player.orientation.x = cos(data->player.angle);
-		data->player.orientation.y = -sin(data->player.angle);
-		data->player.pos = (t_fpoint){player - line + 0.5, i / data->map.width + 0.5};
-		*player = '0';
+		free(line);
 		return (1);
 	}
+	if (line[len - 1] == '\n')
+		len--;
+	ft_memcpy(data->map.map + i, line, len);
+	while (len < data->map.width)
+	{
+		data->map.map[i + len] = ' ';
+		len++;
+	}
+	free(line);
 	return (0);
 }
 
@@ -99,29 +61,15 @@ static char	find_player(t_data *data, char *line, int i)
 static void	fill_map(char *line, t_data *data, int fd)
 {
 	char	player_found;
-	size_t	len;
 	size_t	i;
 
 	player_found = 0;
 	i = 0;
 	while (line)
 	{
-		player_found += find_player(data, line, i);
-		len = ft_strlen(line);
-		if (len < 2)
-		{
-			free(line);
+		player_found += init_player(data, line, i);
+		if (fill_str(line, data, i))
 			break ;
-		}
-		if (line[len - 1] == '\n')
-			len--;
-		ft_memcpy(data->map.map + i, line, len);
-		while (len < data->map.width)
-		{
-			data->map.map[i + len] = ' ';
-			len++;
-		}
-		free(line);
 		if (player_found > 1)
 			exit_close_error("More than one player present on the map\n", 1, fd);
 		line = get_next_line(fd);
@@ -149,10 +97,10 @@ static void	check_map(t_data *data)
 			exit_error("Undefined character\n", 1);
 		if (map[i] == '0')
 		{
-			if (i < width || i > (height - 1) * width ||
-				i % width == 0 || i % width == width - 1 ||
-				map[i + 1] == ' ' || map[i - 1] == ' ' ||
-				map[i + width] == ' ' || map[i - width] == ' ')
+			if (i < width || i > (height - 1) * width \
+				|| i % width == 0 || i % width == width - 1 \
+				|| map[i + 1] == ' ' || map[i - 1] == ' ' \
+				|| map[i + width] == ' ' || map[i - width] == ' ')
 				exit_error("Map not closed\n", 1);
 		}
 		i++;
@@ -162,7 +110,7 @@ static void	check_map(t_data *data)
 //Initializes the map data structure
 void	init_map(t_data *data, char *line, int fd, char *map_name)
 {
-	get_map_dimensions(line, &data->map, fd);
+	init_dimensions(line, &data->map, fd);
 	safe_close(fd);
 	data->map.map = malloc((data->map.height * data->map.width) * sizeof(char));
 	if (data->map.map == NULL)

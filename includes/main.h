@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: scuter <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 15:14:18 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 02:02:39 by scuter           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,12 @@ void	init_loop(void *mlx_ptr, void *win_ptr, t_data *data);
 //	init_map.c
 //Initializes the map data structure
 void	init_map(t_data *data, char *line, int fd, char *map_name);
+//	init_dimensions.c
+//Gets the dimensions of the map from the config file
+void	init_dimensions(char *line, t_map *map, int fd);
+//	init_player.c
+//Inits player if it finds it in the map
+char	init_player(t_data *data, char *line, int i);
 //	init_config.c
 //Parses the config data structure
 char	*parse_config(t_data *data, char *line, int fd);
