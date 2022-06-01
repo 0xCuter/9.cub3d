@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 14:26:21 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 14:27:25 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 09:50:57 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	draw_wall(t_data *data, int i, t_ray *ray, t_ray_s *ray_s)
 	int	y;
 	int	draw_height;
 
-	y = (SCREEN_HEIGHT - ray_s->wall_height) * data->player.vertical_angle;
+	y = (SCREEN_HEIGHT - ray_s->wall_height) / 2;
 	draw_height = y + ray_s->wall_height;
 	while (y < draw_height)
 	{
@@ -57,11 +57,11 @@ void	draw_wall(t_data *data, int i, t_ray *ray, t_ray_s *ray_s)
 	}
 }
 
-void	draw_fog(int i, t_data *data, float *vertical_angle)
+void	draw_fog(int i, t_data *data)
 {
 	img_square_put(&data->mlx_data.img, argb(0, 0, 0, 0),
 		(t_point){i * ((float)GAME_WIDTH / data->s.ray_amount),
-		(SCREEN_HEIGHT - (SCREEN_HEIGHT / S_VIEW_DISTANCE)) * *vertical_angle},
+		(SCREEN_HEIGHT - (SCREEN_HEIGHT / S_VIEW_DISTANCE)) / 2},
 		(t_point){((float)GAME_WIDTH / data->s.ray_amount) + 1,
 		SCREEN_HEIGHT / S_VIEW_DISTANCE});
 }

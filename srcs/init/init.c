@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 10:45:52 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 12:07:54 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 09:49:39 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	init_data(char *map_name, t_data *data)
 		exit_close_error("Could not read file\n", 1, fd);
 	line = parse_config(data, line, fd);
 	init_map(data, line, fd, map_name);
-	data->player.vertical_angle = 0.5;
 	data->keys.keys_pressed_count = 0;
 	data->mlx_data.img.img = mlx_new_image(
 			data->mlx_data.mlx_ptr, SCREEN_WIDTH, SCREEN_HEIGHT);

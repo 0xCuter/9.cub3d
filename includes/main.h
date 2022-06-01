@@ -6,7 +6,7 @@
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:09:17 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/06/01 09:12:03 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 09:49:03 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef struct s_player {
 	t_fpoint	pos;
 	t_fpoint	orientation;
 	float		angle;
-	float		vertical_angle;
 }	t_player;
 
 //Structure holding the mlx's data
@@ -140,7 +139,7 @@ t_ray	check_vertical(t_map *map, t_fpoint p_pos, float angle);
 //Renders a ray that hit a wall
 void	draw_wall(t_data *data, int i, t_ray *ray, t_ray_s *ray_s);
 //Renders a ray that didn't hit a wall
-void	draw_fog(int i, t_data *data, float *vertical_angle);
+void	draw_fog(int i, t_data *data);
 //	draw.c
 //Main render function
 void	draw(t_data *data);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vvandenb <vvandenb@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:46:48 by vvandenb          #+#    #+#             */
-/*   Updated: 2022/05/31 14:45:57 by vvandenb         ###   ########.fr       */
+/*   Updated: 2022/06/01 09:49:43 by vvandenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	draw_ray(t_data *data, t_ray *ray, size_t i)
 		draw_wall(data, i, ray, &ray_s);
 	}
 	else
-		draw_fog(i, data, &data->player.vertical_angle);
+		draw_fog(i, data);
 }
 
 static t_ray	*set_ray(t_ray *ray_horiz, t_ray *ray_vert,
